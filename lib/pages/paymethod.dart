@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:truckdelivery/pages/tafseel.dart';
 
 class PaymentMethod extends StatefulWidget {
@@ -292,7 +290,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                         value: pay,
                                         onChanged: (value) {
                                           setState(() {
-                                            pay = value;
+                                            pay = value!;
                                           });
                                         })
                                   ],
@@ -322,7 +320,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                         value: kasah,
                                         onChanged: (value) {
                                           setState(() {
-                                            kasah = value;
+                                            kasah = value!;
                                           });
                                         })
                                   ],
@@ -363,7 +361,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                         value: mada,
                                         onChanged: (value) {
                                           setState(() {
-                                            mada = value;
+                                            mada = value!;
                                           });
                                         })
                                   ],
@@ -398,7 +396,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                         value: stcpay,
                                         onChanged: (value) {
                                           setState(() {
-                                            stcpay = value;
+                                            stcpay = value!;
                                           });
                                         })
                                   ],
@@ -425,7 +423,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                         value: visa,
                                         onChanged: (value) {
                                           setState(() {
-                                            visa = value;
+                                            visa = value!;
                                           });
                                         })
                                   ],
@@ -452,7 +450,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                         value: mcart,
                                         onChanged: (value) {
                                           setState(() {
-                                            mcart = value;
+                                            mcart = value!;
                                           });
                                         })
                                   ],

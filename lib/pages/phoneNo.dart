@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:truckdelivery/controller/auth_controller.dart';
+import 'package:truckdelivery/helper/material_dialog_content.dart';
+import 'package:truckdelivery/helper/material_dialog_helper.dart';
+import 'package:truckdelivery/helper/snackbar_helper.dart';
+import 'package:truckdelivery/model/snackbar_message.dart';
 
 import 'otp.dart';
 
@@ -9,6 +16,29 @@ class PhoneNumber extends StatefulWidget {
 
 class _PhoneNumberState extends State<PhoneNumber> {
   TextEditingController inputcontroller = TextEditingController();
+  AuthController _authController=Get.put(AuthController());
+  final MaterialDialogHelper _dialogHelper = MaterialDialogHelper.instance();
+
+  void _phoneNumberVerify() async {
+    _dialogHelper
+      ..injectContext(context)
+      ..showProgressDialog('إرسال Otp ....');
+    final message = await _authController.phoneVerify();
+    _dialogHelper.dismissProgress();
+    if (message == null) {
+      _dialogHelper.showMaterialDialogWithContent(
+          MaterialDialogContent.networkError(), () => _phoneNumberVerify());
+      return;
+    }
+    final snackbar = SnackbarHelper.instance..injectContext(context);
+    if (message.isNotEmpty) {
+      snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: message));
+    }
+    //snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'الغناء بنجاح ..!'));
+    Future.delayed(const Duration(milliseconds: 700))
+        .then((_) => Navigator.push(context, MaterialPageRoute(builder: (ctx) => OTP())));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +125,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                   ),
                   child: TextFormField(
                       keyboardType: TextInputType.number,
-                      controller: inputcontroller,
+                      controller: _authController.phoneNumber.value,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         isDense: true,
@@ -109,12 +139,11 @@ class _PhoneNumberState extends State<PhoneNumber> {
                       )),
                 ),
                 SizedBox(
-                  height: 200,
+                  height: 150,
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (ctx) => OTP()));
+                    _phoneNumberVerify();
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 70),

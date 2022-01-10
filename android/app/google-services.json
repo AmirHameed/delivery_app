@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "915584850766",
+    "project_id": "delivery-app-e3483",
+    "storage_bucket": "delivery-app-e3483.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915584850766:android:8d649ebfc27fd4c8721c1f",
+        "android_client_info": {
+          "package_name": "com.example.truckdelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915584850766-t38sh732l0qf1rg15na03ur0lq3vk54f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.truckdelivery",
+            "certificate_hash": "93631767e4a1817121adf55d82470f6df0fd0355"
+          }
+        },
+        {
+          "client_id": "915584850766-u7ia1ke81j7h27kafu40rmc6a2ovoi7v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs9dAN4PIBaZXUfbL14T7yyku7yj6BCgo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "915584850766-u7ia1ke81j7h27kafu40rmc6a2ovoi7v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

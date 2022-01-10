@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:truckdelivery/pages/bottomAppbar.dart';
 import 'package:truckdelivery/pages/localDriver.dart';
 import 'package:truckdelivery/pages/outsideDriver.dart';
 import 'package:truckdelivery/pages/paymethod.dart';
@@ -226,11 +227,14 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment:MainAxisAlignment.center,
       
           children: [
-            Text(
-              text,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                text,
+                maxLines: 1,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],

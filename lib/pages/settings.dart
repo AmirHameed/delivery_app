@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:truckdelivery/controller/setting_controller.dart';
+import 'package:truckdelivery/helper/shared_preference_helper.dart';
 import 'package:truckdelivery/pages/profile.dart';
 
 import 'ads.dart';
@@ -11,6 +14,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  SettingController _=Get.put(SettingController());
   bool switchControl = false;
   void toggleSwitch(bool value) {
     if (switchControl == false) {
@@ -105,7 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         height: 4,
                                       ),
                                       Text(
-                                        'محمد احمد',
+                                        _.name.toString(),
                                         style: TextStyle(
                                           fontSize: 13,
                                           color: Color(0xff28476E),
