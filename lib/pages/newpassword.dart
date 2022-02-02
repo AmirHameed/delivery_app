@@ -1,5 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:truckdelivery/controller/auth_controller.dart';
+import 'package:truckdelivery/helper/material_dialog_content.dart';
+import 'package:truckdelivery/helper/material_dialog_helper.dart';
+import 'package:truckdelivery/helper/snackbar_helper.dart';
+import 'package:truckdelivery/model/snackbar_message.dart';
 
 class NewPasswordPage extends StatefulWidget {
   @override
@@ -7,10 +12,37 @@ class NewPasswordPage extends StatefulWidget {
 }
 
 class _NewPasswordPageState extends State<NewPasswordPage> {
+  final MaterialDialogHelper _dialogHelper = MaterialDialogHelper.instance();
+
+  AuthController _ = Get.put(AuthController());
+
+  void _passwordChanged() async {
+    _dialogHelper
+      ..injectContext(context)
+      ..showProgressDialog('تغيير كلمة المرور....');
+    final message = await _.changePassword(oldPasword.text, newPasword.text);
+    _dialogHelper.dismissProgress();
+    if (message == null) {
+      _dialogHelper.showMaterialDialogWithContent(MaterialDialogContent.networkError(), () => _passwordChanged());
+      return;
+    }
+    final snackbarHelper = SnackbarHelper.instance..injectContext(context);
+    if (message.isNotEmpty) {
+      snackbarHelper.showSnackbar(snackbar: SnackbarMessage.error(message: message));
+      return;
+    }
+    snackbarHelper.showSnackbar(snackbar: SnackbarMessage.success(message: 'تم تغيير كلمة المرور بنجاح'));
+  }
+
+  TextEditingController oldPasword = TextEditingController();
+  TextEditingController newPasword = TextEditingController();
+  TextEditingController confirmPasword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final snackbarHelper = SnackbarHelper.instance..injectContext(context);
     return Scaffold(
-      resizeToAvoidBottomInset:false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xff99DEF8),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -21,8 +53,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                padding:
-                    EdgeInsets.only(top: 70, right: 10, left: 10, bottom: 20),
+                padding: EdgeInsets.only(top: 70, right: 10, left: 10, bottom: 20),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white.withOpacity(0.5)),
                 ),
@@ -45,8 +76,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                 },
                                 child: Image.asset('assets/backButton.png')),
                             Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 3),
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 3),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 color: Colors.white,
@@ -108,12 +138,12 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                                 child: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
+                                    padding: EdgeInsets.symmetric(horizontal: 10),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
                                     ),
                                     child: TextFormField(
+                                        controller: oldPasword,
                                         textAlign: TextAlign.right,
                                         decoration: InputDecoration(
                                             prefixIcon: Icon(
@@ -122,9 +152,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                             ),
                                             border: InputBorder.none,
                                             hintText: 'كلمة المرور القديمة',
-                                            hintStyle: TextStyle(
-                                                color: Color(0xff28476E),
-                                                fontSize: 13)))),
+                                            hintStyle: TextStyle(color: Color(0xff28476E), fontSize: 13)))),
                               ),
                               SizedBox(
                                 height: 5,
@@ -135,13 +163,13 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                                 child: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
+                                    padding: EdgeInsets.symmetric(horizontal: 10),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
                                     ),
                                     child: TextFormField(
                                         textAlign: TextAlign.right,
+                                        controller: newPasword,
                                         decoration: InputDecoration(
                                             prefixIcon: Icon(
                                               Icons.visibility_off_outlined,
@@ -149,9 +177,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                             ),
                                             border: InputBorder.none,
                                             hintText: 'كلمة المرور الجديدة',
-                                            hintStyle: TextStyle(
-                                                color: Color(0xff28476E),
-                                                fontSize: 13)))),
+                                            hintStyle: TextStyle(color: Color(0xff28476E), fontSize: 13)))),
                               ),
                               SizedBox(
                                 height: 5,
@@ -167,13 +193,12 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   child: TextFormField(
+                                    controller: confirmPasword,
                                     textAlign: TextAlign.right,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: 'تأكيد كلمة المرور',
-                                      hintStyle: TextStyle(
-                                          color: Color(0xff28476E),
-                                          fontSize: 13),
+                                      hintStyle: TextStyle(color: Color(0xff28476E), fontSize: 13),
                                     ),
                                   ),
                                 ),
@@ -182,7 +207,23 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                 height: 200,
                               ),
                               InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  if (oldPasword.text.length < 8 ||newPasword.text.length < 8 ) {
+                                    snackbarHelper.showSnackbar(
+                                        snackbar: SnackbarMessage.error(message: 'مزيج كلمة المرور 8 أحرف'));
+                                    return;
+                                  } else if (oldPasword.text.isEmpty||newPasword.text.isEmpty||confirmPasword.text.isEmpty) {
+                                    snackbarHelper.showSnackbar(
+                                        snackbar: SnackbarMessage.error(message: 'حقل كلمة المرور مطلوب'));
+                                    return;
+                                  }
+                                  else if(newPasword.text!=confirmPasword.text){
+                                    snackbarHelper.showSnackbar(
+                                        snackbar: SnackbarMessage.error(message: 'كلمة السر ليست جيدة'));
+                                    return;
+                                  }
+                                  _passwordChanged();
+                                },
                                 child: Padding(
                                   padding: const EdgeInsets.all(15.0),
                                   child: Card(

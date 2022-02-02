@@ -5,7 +5,7 @@ import 'package:truckdelivery/helper/material_dialog_content.dart';
 import 'package:truckdelivery/helper/material_dialog_helper.dart';
 import 'package:truckdelivery/helper/snackbar_helper.dart';
 import 'package:truckdelivery/model/snackbar_message.dart';
-import 'package:truckdelivery/pages/phoneNo.dart';
+import 'package:truckdelivery/pages/bottomAppbar.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -25,7 +25,7 @@ class _SignUpState extends State<SignUp> {
   void _signup() async {
     _dialogHelper
       ..injectContext(context)
-      ..showProgressDialog('الغناء .....');
+      ..showProgressDialog('جاري التسجيل .....');
     final message = await _.signUp();
     _dialogHelper.dismissProgress();
     if (message == null) {
@@ -38,8 +38,8 @@ class _SignUpState extends State<SignUp> {
       snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: message));
       return;
     }
-    snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'الغناء بنجاح ..!'));
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) => PhoneNumber()));
+    snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تم الدخول بنجاح ...!'));
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) => BottomApp()));
 
     // Future.delayed(const Duration(milliseconds: 700))
     //     .then((_) => Navigator.pushNamedAndRemoveUntil(context, MainScreen.route, (route) => false));

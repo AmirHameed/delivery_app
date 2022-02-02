@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:truckdelivery/model/user_model.dart';
 
-late SharedPreferences? _sharedPreferences;
+ SharedPreferences? _sharedPreferences;
 
 class SharedPreferenceHelper {
   static const String _USER = 'SharedPreferenceHelper.user';
@@ -12,7 +12,7 @@ class SharedPreferenceHelper {
   SharedPreferenceHelper._internal();
 
   static void initializeSharedPreference() {
-    SharedPreferences.getInstance().then((value) => _sharedPreferences = value);
+     SharedPreferences.getInstance().then((value) => _sharedPreferences = value);
   }
 
   Future<void> storeUser(UserModel user) async {
@@ -23,6 +23,8 @@ class SharedPreferenceHelper {
 
   Future<UserModel?> user() async {
      final  userSerialization =  _sharedPreferences?.getString(_USER);
+     print(userSerialization);
+     print('get string');
     if (userSerialization == null) return null;
     print(json.decode(userSerialization));
     return UserModel.fromJson((await json.decode(userSerialization)));

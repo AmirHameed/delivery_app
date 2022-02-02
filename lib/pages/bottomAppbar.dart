@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truckdelivery/pages/ads.dart';
@@ -45,7 +47,7 @@ class _BottomAppState extends State<BottomApp> {
                   children: [
                     Image.asset('assets/star.png'),
                     Text(
-                      "التنبيهات",
+                      "المفضلة",
                       style: TextStyle(
                         color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
                       ),
@@ -65,7 +67,7 @@ class _BottomAppState extends State<BottomApp> {
                   children: [
                     Image.asset('assets/notify.png'),
                     Text(
-                      "متاجر",
+                      "التنبيهات",
                       style: TextStyle(
                         color: index == 1 ? Color(0xff7c5aa7) : Colors.grey,
                       ),
@@ -85,7 +87,7 @@ class _BottomAppState extends State<BottomApp> {
                   children: [
                     Image.asset('assets/home.png'),
                     Text(
-                      "اعلانات",
+                      "الرئيسية",
                       style: TextStyle(
                         color: index == 2 ? Color(0xff7c5aa7) : Colors.grey,
                       ),
@@ -105,7 +107,7 @@ class _BottomAppState extends State<BottomApp> {
                   children: [
                     Image.asset('assets/messaging.png'),
                     Text(
-                      "الحساب",
+                      "رسالة",
                       style: TextStyle(
                         color: index == 3 ? Color(0xff7c5aa7) : Colors.grey,
                       ),
@@ -125,7 +127,7 @@ class _BottomAppState extends State<BottomApp> {
                   children: [
                     Image.asset('assets/document.png'),
                     Text(
-                      "الحساب",
+                      "طلباتي",
                       style: TextStyle(
                         color: index == 4 ? Color(0xff7c5aa7) : Colors.grey,
                       ),
@@ -137,7 +139,107 @@ class _BottomAppState extends State<BottomApp> {
           ),
         ),
       ),
-      body: PageStorage(bucket: bucket, child: curentScreen),
+      body: WillPopScope(
+          onWillPop: () async{
+            if(index!=2){
+              setState(() {
+                curentScreen = HomePage();
+                index = 2;
+              });
+              return false;
+            }
+            return _showMyDialog(context);
+          },
+          child: PageStorage(bucket: bucket, child: curentScreen)),
+    );
+  }
+
+  Future<bool> _showMyDialog(context) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: Container(
+            height: 150,
+            padding: EdgeInsets.only(top: 20, right: 10, left: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'هل تريد ترك هذا التطبيق',
+
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Color(0xff28476E),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        exit(0);
+                      },
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Container(
+                          padding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                          decoration: BoxDecoration(
+                              color: Color(0xff99DEF8),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Center(
+                            child: Text('خروج',
+                                style: TextStyle(
+                                  color: Color(0xff28476E),
+                                  fontSize: 16,
+                                )),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 30,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Container(
+                          padding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                          decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Center(
+                            child: Text('الغاء',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 16,
+                                )),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

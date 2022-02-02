@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'bottomAppbar.dart';
+
 class AdsPage extends StatefulWidget {
   @override
   _AdsPageState createState() => _AdsPageState();
@@ -40,7 +42,7 @@ class _AdsPageState extends State<AdsPage> {
                           children: [
                             InkWell(
                                 onTap: () {
-                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>BottomApp()));
                                 },
                                 child: Image.asset('assets/backButton.png')),
                             Container(

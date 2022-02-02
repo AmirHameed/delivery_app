@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:truckdelivery/controller/auth_controller.dart';
 import 'package:truckdelivery/helper/material_dialog_content.dart';
@@ -9,10 +6,8 @@ import 'package:truckdelivery/helper/material_dialog_helper.dart';
 import 'package:truckdelivery/helper/snackbar_helper.dart';
 import 'package:truckdelivery/model/snackbar_message.dart';
 import 'package:truckdelivery/pages/bottomAppbar.dart';
-import 'package:truckdelivery/pages/phoneNo.dart';
 import 'package:truckdelivery/pages/signup.dart';
-
-import 'homePage.dart';
+import 'dart:io' show Platform;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -48,8 +43,49 @@ class _LoginPageState extends State<LoginPage> {
         .then((_) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => BottomApp())));
   }
 
+  void _googleLogin() async {
+    _dialogHelper
+      ..injectContext(context)
+      ..showProgressDialog('تسجيل....');
+    final message = await _.signInWithGoogle();
+    _dialogHelper.dismissProgress();
+    if (message == null) {
+      _dialogHelper.showMaterialDialogWithContent(MaterialDialogContent.networkError(), () => _googleLogin());
+      return;
+    }
+    final snackbarHelper = SnackbarHelper.instance..injectContext(context);
+    if (message.isEmpty) {
+      snackbarHelper.showSnackbar(snackbar: SnackbarMessage.error(message: message));
+      return;
+    }
+    snackbarHelper.showSnackbar(snackbar: SnackbarMessage.success(message: 'تم تسجيل دخول المستخدم بنجاح'));
+    Future.delayed(const Duration(milliseconds: 700))
+        .then((_) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => BottomApp())));
+  }
+
+  void _appleLogin() async {
+    _dialogHelper
+      ..injectContext(context)
+      ..showProgressDialog('تسجيل....');
+    final message = await _.signInWithApple();
+    _dialogHelper.dismissProgress();
+    if (message == null) {
+      _dialogHelper.showMaterialDialogWithContent(MaterialDialogContent.networkError(), () => _appleLogin());
+      return;
+    }
+    final snackbarHelper = SnackbarHelper.instance..injectContext(context);
+    if (message.isEmpty) {
+      snackbarHelper.showSnackbar(snackbar: SnackbarMessage.error(message: message));
+      return;
+    }
+    snackbarHelper.showSnackbar(snackbar: SnackbarMessage.success(message: 'تم تسجيل دخول المستخدم بنجاح'));
+    Future.delayed(const Duration(milliseconds: 700))
+        .then((_) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => BottomApp())));
+  }
   @override
   Widget build(BuildContext context) {
+    final snackbarHelper = SnackbarHelper.instance..injectContext(context);
+
     return Scaffold(
       backgroundColor: Color(0xffCBEEFB),
       body: SingleChildScrollView(
@@ -201,7 +237,7 @@ class _LoginPageState extends State<LoginPage> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (ctx) => PhoneNumber()));
+                              Navigator.push(context, MaterialPageRoute(builder: (ctx) => SignUp()));
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
@@ -248,35 +284,44 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    Card(
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      child: Container(
-                        width: 200,
-                        // margin: EdgeInsets.symmetric(horizontal: 70),
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(30)),
-                        child: Row(
-                          children: [
-                            Image(
-                              image: AssetImage('assets/black-apple-icon.png'),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Apple المتابعة مع',
-                              style: TextStyle(
-                                fontSize: 15,
+                    GestureDetector(
+                      onTap: (){
+                        if (Platform.isAndroid) {
+                          snackbarHelper.showSnackbar(snackbar: SnackbarMessage.error(message: 'الرجاء الاتصال بجهاز IOS'));
+                          return;
+                        }
+                        _appleLogin();
+                      },
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        child: Container(
+                          width: 200,
+                          // margin: EdgeInsets.symmetric(horizontal: 70),
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(30)),
+                          child: Row(
+                            children: [
+                              Image(
+                                image: AssetImage('assets/black-apple-icon.png'),
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Apple المتابعة مع',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                     InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (ctx) => HomePage()));
+                          _googleLogin();
                         },
                         child: Card(
                           elevation: 3,
@@ -304,32 +349,6 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         )),
-                    Card(
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      child: Container(
-                        width: 200,
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
-                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(30)),
-                        child: Row(
-                          children: [
-                            Image(
-                              image: AssetImage('assets/Huawei-logo-white-1.png'),
-                              height: 40,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              'Huawei  المتابعة مع',
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                     SizedBox(
                       height: 40,
                     ),

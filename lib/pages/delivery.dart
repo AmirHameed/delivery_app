@@ -1,188 +1,225 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:truckdelivery/pages/onlyCars.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:truckdelivery/controller/delivery_controller.dart';
+import 'package:truckdelivery/pages/detail.dart';
+import 'package:truckdelivery/pages/paymethod.dart';
+import 'package:truckdelivery/pages/tafseel.dart';
 
 class Delivery extends StatefulWidget {
+  final int isOutCity;
+  final String carTile;
+
+  Delivery({required this.isOutCity, required this.carTile});
+
   @override
   _DeliveryState createState() => _DeliveryState();
 }
 
 class _DeliveryState extends State<Delivery> {
+  DeliveryController deliveryController = Get.put(DeliveryController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff99DEF8),
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/located.png'),
-                      fit: BoxFit.cover)),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.3,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/header4.png'),
-                      fit: BoxFit.cover)),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Color(0xff28476E), Colors.white10]),
+        resizeToAvoidBottomInset: false,
+        body: GetBuilder<DeliveryController>(builder: (_deliveryController) {
+          final kInitialPosition = LatLng(_deliveryController.position!.latitude, _deliveryController.position!.longitude);
+
+          return Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 60),
+                child: PlacePicker(
+                  apiKey: 'AIzaSyDeX7maRqimkPJPhvxKEy-uTNyV0IhVzlQ',
+                  initialPosition: kInitialPosition,
+                  useCurrentLocation: true,
+                  selectInitialPosition: true,
+                  usePlaceDetailSearch: true,
+                  onPlacePicked: (result) {
+                    _deliveryController.isCheckedPick == true
+                        ? _deliveryController.pickselectedPlace = result
+                        : _deliveryController.dropselectedPlace = result;
+                    Navigator.of(context).pop();
+                    setState(() {});
+                  },
+                  forceSearchOnZoomChanged: true,
+                  automaticallyImplyAppBarLeading: false,
+                  // autocompleteLanguage: "ko",
+                  // region: 'au',
+                  selectedPlaceWidgetBuilder: (_, selectedPlace, state, isSearchBarFocused) {
+                    print("state: $state, isSearchBarFocused: $isSearchBarFocused");
+                    _deliveryController.isCheckedPick == true
+                        ? _deliveryController.pickselectedPlace = selectedPlace
+                        : _deliveryController.dropselectedPlace = selectedPlace;
+                    return isSearchBarFocused
+                        ? Container()
+                        : FloatingCard(
+                            bottomPosition: 10.0,
+                            // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+                            leftPosition: 20.0,
+                            rightPosition: 20.0,
+                            width: 400,
+                            borderRadius: BorderRadius.circular(12.0),
+                            child: state == SearchingState.Searching
+                                ? Center(child: CircularProgressIndicator())
+                                : Container(
+                                    child: Column(children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 15),
+                                        decoration: BoxDecoration(
+                                            color: Color(0xffE3F3F9),
+                                            borderRadius:
+                                                BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+                                        child: Column(children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                _deliveryController.isCheckedPick == true
+                                                    ? 'مكان استلام الطرد'
+                                                    : 'مكان تسليم الطرد',
+                                                textAlign: TextAlign.right,
+                                                style: TextStyle(color: Color(0xff28476E), fontSize: 25),
+                                              ),
+                                            ],
+                                          ),
+                                          Divider(
+                                            color: Colors.white,
+                                            thickness: 2,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  '${selectedPlace?.formattedAddress}',
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 2,
+                                                  style: TextStyle(color: Color(0xff28476E), fontSize: 15),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          // Row(
+                                          //   children: [
+                                          //     Text(
+                                          //       '${selectedPlace?.geometry?.location.lat},${selectedPlace?.geometry?.location.lat}',
+                                          //       textAlign: TextAlign.right,
+                                          //       style: TextStyle(color: Color(0xff28476E), fontSize: 15),
+                                          //     ),
+                                          //   ],
+                                          // ),
+                                        ]),
+                                      ),
+                                      SizedBox(
+                                        height: 15,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (_deliveryController.isCheckedPick == true) {
+                                            print('pick And Drop klklk');
+                                            _deliveryController.isCheckedPick = false;
+                                            setState(() {});
+                                          } else {
+                                            _deliveryController.addMarker();
+                                            _deliveryController.isCheckedPick = true;
+                                            if (widget.isOutCity == 5 || widget.isOutCity == 6) {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (ctx) => DetailPage(
+                                                            isOutCity: widget.isOutCity,
+                                                            carTitle: widget.carTile,
+                                                          )));
+                                            } else {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (ctx) => PaymentMethod(
+                                                            isOutCity: widget.isOutCity,
+                                                            carTitle: widget.carTile,
+                                                          )));
+                                            }
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(vertical: 5),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(20),
+                                              bottomRight: Radius.circular(20),
+                                            ),
+                                            color: _deliveryController.isCheckedPick ? Color(0xff99DEF8) : Color(0xff28476E),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              _deliveryController.isCheckedPick == true
+                                                  ? 'تأكيد مكان استلام الطرد'
+                                                  : 'تأكيد مكان تسليم الطرد',
+                                              textAlign: TextAlign.right,
+                                              style: TextStyle(
+                                                  color: _deliveryController.isCheckedPick ? Color(0xff28476E) : Colors.white,
+                                                  fontSize: 20),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ]),
+                                  ));
+                  },
+                  pinBuilder: (context, state) {
+                    if (state == PinState.Idle) {
+                      return Icon(
+                        Icons.location_on,
+                        size: 50,
+                        color: Colors.red,
+                      );
+                    } else {
+                      return Icon(
+                        Icons.location_searching,
+                        size: 50,
+                        color: Colors.red,
+                      );
+                    }
+                  },
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                padding:
-                    EdgeInsets.only(top: 40, right: 15, left: 15, bottom: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
-                  border: Border.all(color: Colors.white.withOpacity(0.5)),
-                ),
-                child: Column(
+              Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: Row(
                   children: [
-                    Row(
-                      children: [
-                        InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Image.asset('assets/backButton.png')),
-                        SizedBox(
-                          width: 40,
-                        ),
-                        Text(
-                          'ارسال واستقبال اطرود',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Image.asset('assets/backButton.png')),
                     SizedBox(
-                      height: 30,
+                      width: 20,
                     ),
-                    Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20),
-                            ),
-                            color: Colors.white),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            prefixIcon: Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Color(0xff99DEF8),
-                              ),
-                              child: Text(
-                                'ابحث',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            suffixIcon: Icon(Icons.search),
-                          ),
-                        )),
-                    SizedBox(
-                      height: 400,
+                    Expanded(
+                      child: Text(
+                        widget.isOutCity == 0
+                            ? 'شحن طرود ( خارج المدينة )'
+                            : widget.isOutCity == 1
+                                ? 'ارسال واستقبال اطرود'
+                                : widget.isOutCity == 3
+                                    ? 'شحن عفش ( خارج المدينة )'
+                                    : widget.isOutCity == 4
+                                        ? 'نقل عفش'
+                                        : widget.isOutCity == 5
+                                            ? ' سطحة ( خارج المدينة )'
+                                            : 'سطحة ( داخل المدينة )',
+                        maxLines: 1,
+                        style: TextStyle(color: Colors.black, fontSize: 23, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    Container(
-                      child: Column(children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
-                          decoration: BoxDecoration(
-                              color: Color(0xffE3F3F9),
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20))),
-                          child: Column(children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'مكان استلام الطرد',
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      color: Color(0xff28476E), fontSize: 25),
-                                ),
-                              ],
-                            ),
-                            Divider(
-                              color: Colors.white,
-                              thickness: 2,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  'Thulaim Riyadh Saudi Arabia  ',
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      color: Color(0xff28476E), fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  ' 24.638888,46.719762',
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      color: Color(0xff28476E), fontSize: 15),
-                                ),
-                              ],
-                            ),
-                          ]),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20),
-                            ),
-                            color: Color(0xffE3F3F9),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'تأكيد مكان استلام الطرد',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  color: Color(0xff28476E), fontSize: 20),
-                            ),
-                          ),
-                        ),
-                      ]),
-                    )
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+            ],
+          );
+        }));
   }
 }

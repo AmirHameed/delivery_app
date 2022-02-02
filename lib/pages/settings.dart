@@ -1,8 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share/share.dart';
 import 'package:truckdelivery/controller/setting_controller.dart';
-import 'package:truckdelivery/helper/shared_preference_helper.dart';
+import 'package:truckdelivery/model/user_model.dart';
+import 'package:truckdelivery/pages/bottomAppbar.dart';
+import 'package:truckdelivery/pages/login.dart';
 import 'package:truckdelivery/pages/profile.dart';
 
 import 'ads.dart';
@@ -15,6 +17,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   SettingController _=Get.put(SettingController());
+  UserModel? userModel;
   bool switchControl = false;
   void toggleSwitch(bool value) {
     if (switchControl == false) {
@@ -61,7 +64,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           children: [
                             InkWell(
                               onTap: (){
-                                Navigator.pop(context);
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>BottomApp()));
                               },
                               child: Image.asset('assets/backButton.png')),
                             Container(
@@ -85,56 +88,68 @@ class _SettingsPageState extends State<SettingsPage> {
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 30),
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage('assets/frame.png'),
-                                        fit: BoxFit.fill),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      CircleAvatar(
-                                        radius: 30,
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        _.name.toString(),
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Color(0xff28476E),
+                        GetBuilder<SettingController>(
+                         builder: (value)
+                          =>Container(
+                            margin: EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 30),
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage('assets/frame.png'),
+                                          fit: BoxFit.fill),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 20,
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 3,
-                                      ),
-                                    ],
-                                  )),
-                              InkWell(
-                                   onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ProfilePage()));
-                                        },
-                                child: CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor: Colors.white,
-                                  child: Image.asset(
-                                    'assets/edit.png',
-                                    fit: BoxFit.fill,
-                                    height: 60,
+                                        Container(
+                                          width: 80,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                              color: Colors.blue,
+                                              shape: BoxShape.circle,
+                                              image: value.userModel?.image != null
+                                                  ? DecorationImage(image: NetworkImage(value.userModel!.image), fit: BoxFit.cover)
+                                                  : null),
+                                          alignment: Alignment.center,
+
+                                        ),
+                                        SizedBox(
+                                          height: 4,
+                                        ),
+                                           Text(
+                                            '${value.userModel?.firstName??''} ${value.userModel?.lastName??''}',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Color(0xff28476E),
+                                            ),
+                                          ),
+                                        SizedBox(
+                                          height: 7,
+                                        ),
+                                      ],
+                                    )),
+                                InkWell(
+                                     onTap: (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ProfilePage()));
+                                          },
+                                  child: CircleAvatar(
+                                    radius: 40,
+                                    backgroundColor: Colors.white,
+                                    child: Image.asset(
+                                      'assets/edit.png',
+                                      fit: BoxFit.fill,
+                                      height: 60,
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -182,36 +197,36 @@ class _SettingsPageState extends State<SettingsPage> {
                               SizedBox(
                                 height: 3,
                               ),
-                              Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'دعوة اصدقائك',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color(0xff28476E),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Image.asset('assets/addUser.png'),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              // Card(
+                              //   elevation: 3,
+                              //   shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(20)),
+                              //   child: Container(
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: 20, vertical: 8),
+                              //     decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(20),
+                              //       color: Colors.white,
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.end,
+                              //       children: [
+                              //         Text(
+                              //           'دعوة اصدقائك',
+                              //           textAlign: TextAlign.right,
+                              //           style: TextStyle(
+                              //             fontSize: 18,
+                              //             color: Color(0xff28476E),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 10,
+                              //         ),
+                              //         Image.asset('assets/addUser.png'),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                               SizedBox(
                                 height: 3,
                               ),
@@ -270,33 +285,38 @@ class _SettingsPageState extends State<SettingsPage> {
                               SizedBox(
                                 height: 3,
                               ),
-                              Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 9),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'مشاركة التطبيق',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color(0xff28476E),
+                              GestureDetector(
+                                onTap: (){
+                                  Share.share("www.truckDelivery.app.com");
+                                },
+                                child: Card(
+                                  elevation: 3,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 9),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'مشاركة التطبيق',
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Color(0xff28476E),
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Image.asset('assets/share.png'),
-                                    ],
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Image.asset('assets/share.png'),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -553,6 +573,49 @@ class _SettingsPageState extends State<SettingsPage> {
                                           width: 10,
                                         ),
                                         Image.asset('assets/letter.png'),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              GestureDetector(
+                                onTap: (){
+                                  _.logout();
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (ctx) => LoginPage()),(route) => false,);
+
+                                },
+                                child: Card(
+                                  elevation: 3,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 9),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'تسجيل خروج',
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Color(0xff28476E),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Icon(Icons.logout,color:Color(0xff336699) ,),
                                       ],
                                     ),
                                   ),

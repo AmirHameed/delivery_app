@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:truckdelivery/pages/bottomAppbar.dart';
+import 'package:get/get.dart';
+import 'package:truckdelivery/controller/setting_controller.dart';
 import 'package:truckdelivery/pages/localDriver.dart';
 import 'package:truckdelivery/pages/outsideDriver.dart';
 import 'package:truckdelivery/pages/paymethod.dart';
+import 'package:truckdelivery/pages/profile.dart';
 import 'package:truckdelivery/pages/shifting.dart';
 
 import 'delivery.dart';
@@ -19,6 +23,9 @@ class _HomePageState extends State<HomePage> {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQL6bmlIucVIfLAFFsZQ6A51YM3JwBOCMoryw&usqp=CAU',
     'https://cdn.pixabay.com/photo/2020/12/22/14/44/car-5852408_960_720.jpg',
   ];
+
+  SettingController settingController = Get.put(SettingController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +57,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                padding: EdgeInsets.only(top: 30, right: 10, left: 10,bottom: 20),
+                padding: EdgeInsets.only(top: 30, right: 10, left: 10, bottom: 20),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white),
                 ),
@@ -70,12 +77,26 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CircleAvatar(
-                                radius: 23,
-                                backgroundColor: Color(0xffAD122A),
-                                child: CircleAvatar(
-                                  radius: 22,
-                                  backgroundColor: Colors.white,
+                              GetBuilder<SettingController>(
+                                builder: (value) => GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (ctx) => ProfilePage()));
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 23,
+                                    backgroundColor: Color(0xffAD122A),
+                                    child: Container(
+                                      width: 100,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                          color: Colors.blue,
+                                          shape: BoxShape.circle,
+                                          image: value.userModel?.image != null
+                                              ? DecorationImage(image: NetworkImage(value.userModel!.image), fit: BoxFit.cover)
+                                              : null),
+                                      alignment: Alignment.center,
+                                    ),
+                                  ),
                                 ),
                               ),
                               Image.asset('assets/mic.png'),
@@ -121,72 +142,72 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Expanded(
                                       child: InkWell(
-                                           onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (ctx)=>PaymentMethod()));
-                                        },
-                                        child: myContainer(
-                                            'شحن طرود ( خارج المدينة )',
-                                            'assets/home1.png'),
-                                      )),
-                                          SizedBox(width: 10,),
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity: 0,carTile: '',)));
+                                    },
+                                    child: myContainer('شحن طرود ( خارج المدينة )', 'assets/home1.png'),
+                                  )),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
                                   Expanded(
                                       child: InkWell(
-                                        onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (ctx)=>Delivery()));
-                                        },
-                                        child: myContainer(
-                                            'ارسال واستقبال طرود',
-                                            'assets/home2.png'),
-                                      )),
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity: 1,carTile: '',)));
+                                    },
+                                    child: myContainer('ارسال واستقبال طرود', 'assets/home2.png'),
+                                  )),
                                 ],
                               ),
                               SizedBox(height: 15),
-                               Row(
+                              Row(
                                 children: [
-                                  Expanded(
-                                      child: myContainer(
-                                          'شحن عفش ( خارج المدينة )',
-                                          'assets/home3.png')),
-                                          SizedBox(width: 10,),
+                                  Expanded(child: GestureDetector(
+                                      onTap: (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => Shifting(isOutFurniture: true,)));
+
+                                      },
+                                      child: myContainer('شحن عفش ( خارج المدينة )', 'assets/home3.png'))),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
                                   Expanded(
                                       child: InkWell(
-                                        onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (ctx)=>Shifting()));
-                                        },
-                                        child: myContainer(
-                                            'نقل عفش',
-                                            'assets/home4.png'),
-                                      )),
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Shifting(isOutFurniture: false,)));
+                                    },
+                                    child: myContainer('نقل عفش', 'assets/home4.png'),
+                                  )),
                                 ],
                               ),
-                               SizedBox(height: 15),
-                               Row(
+                              SizedBox(height: 15),
+                              Row(
                                 children: [
                                   Expanded(
                                       child: InkWell(
-                                           onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (ctx)=>OutSideDriver()));
-                                        },
-                                        child: myContainer(
-                                            ' سطحة ( خارج المدينة )',
-                                            'assets/home5.png'),
-                                      )),
-                                          SizedBox(width: 10,),
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => LocalDriver(isOutTruck: true,)));
+                                    },
+                                    child: myContainer(' سطحة ( خارج المدينة )', 'assets/home5.png'),
+                                  )),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
                                   Expanded(
                                       child: InkWell(
-                                             onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (ctx)=>LocalDriver()));
-                                        },
-                                        child: myContainer(
-                                            'سطحة ( داخل المدينة )',
-                                            'assets/home6.png'),
-                                      )),
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => LocalDriver(isOutTruck: false,)));
+                                      },
+                                    child: myContainer('سطحة ( داخل المدينة )', 'assets/home6.png'),
+                                  )),
                                 ],
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: 20,)
+                        SizedBox(
+                          height: 20,
+                        )
                       ],
                     ),
                   ),
@@ -207,6 +228,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
+
   Widget myContainer(String text, image) {
     return Container(
       // padding: EdgeInsets.symmetric(vertical: 50),
@@ -215,17 +238,14 @@ class _HomePageState extends State<HomePage> {
         image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
       ),
       child: Container(
-         padding: EdgeInsets.only(bottom: 80,top: 20),
+        padding: EdgeInsets.only(bottom: 80, top: 20),
         decoration: BoxDecoration(
-           borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20),
           gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xff28476E), Colors.white10]),
+              begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xff28476E), Colors.white10]),
         ),
         child: Row(
-          mainAxisAlignment:MainAxisAlignment.center,
-      
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: Text(

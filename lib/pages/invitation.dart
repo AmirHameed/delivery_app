@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:truckdelivery/pages/bottomAppbar.dart';
 
 class InvitationPage extends StatefulWidget {
   @override
@@ -40,7 +41,7 @@ class _InvitationPageState extends State<InvitationPage> {
                           children: [
                             InkWell(
                                 onTap: () {
-                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>BottomApp()));
                                 },
                                 child: Image.asset('assets/backButton.png')),
                             Container(

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'bottomAppbar.dart';
+
 class MessagingPage extends StatefulWidget {
   @override
   _MessagingPageState createState() => _MessagingPageState();
@@ -98,8 +100,13 @@ class _MessagingPageState extends State<MessagingPage> {
             Positioned(
               left: 15,
               top: 40,
-              child: Center(
-                child: Image.asset('assets/backButton.png'),
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>BottomApp()));
+                },
+                child: Center(
+                  child: Image.asset('assets/backButton.png'),
+                ),
               ),
             ),
           ],

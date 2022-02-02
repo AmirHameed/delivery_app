@@ -1,11 +1,12 @@
 class UserModel {
-  final String id, firstName, lastName, email, phone, image;
+  final String id, firstName, lastName, email, phone, image,type;
   final bool gender;
 
   UserModel(
       {required this.firstName,
       required this.lastName,
       required this.id,
+        required this.type,
       required this.email,
       required this.image,
       required this.phone,
@@ -17,19 +18,20 @@ class UserModel {
     final email = json['email'];
     final image = json['image'];
     final id = json['id'];
+    final type=json.containsKey('type')?json['type']:'';
     final gender = json['gender'];
     final phone = json['phone'];
 
-    return UserModel(firstName: firstName, lastName: lastName, id: id, email: email, image: image, phone: phone, gender: gender);
+    return UserModel(firstName: firstName, lastName: lastName, id: id, email: email, image: image, phone: phone, gender: gender,type: type);
   }
 
   UserModel copyWith({
     String? id,
-    String? facebookId,
     String? name,
+    String? image
   }) =>
       UserModel(
-          image: image, id: id ?? this.id, firstName: firstName, lastName: lastName, gender: gender, phone: phone, email: email);
+         type: type, image: image??this.image, id: id ?? this.id, firstName: firstName, lastName: lastName, gender: gender, phone: phone, email: email);
 
   Map<String, dynamic> toJson() => {
         'first_name': firstName,
@@ -37,6 +39,7 @@ class UserModel {
         'last_name': lastName,
         'image': image,
         'phone': phone,
+         'type':type,
         'gender': gender,
         'id': id,
       };
