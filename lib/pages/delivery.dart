@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -6,7 +5,6 @@ import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:truckdelivery/controller/delivery_controller.dart';
 import 'package:truckdelivery/pages/detail.dart';
 import 'package:truckdelivery/pages/paymethod.dart';
-import 'package:truckdelivery/pages/tafseel.dart';
 
 class Delivery extends StatefulWidget {
   final int isOutCity;

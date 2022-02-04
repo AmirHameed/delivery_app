@@ -286,70 +286,70 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                         height: 30,
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        height: MediaQuery.of(context).size.height * 0.04,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Color(0xff28476E),
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _.isMale.value = !_.isMale.value;
-                                });
-                              },
-                              child: Container(
-                                padding: EdgeInsets.only(left: 20),
-                                child: Center(
-                                  // انثى text
-                                  child: Text(
-                                    'انثى',
-                                    style: TextStyle(
-                                        color: _.isMale.value == false ? Color(0xff28476E) : Colors.blue,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'JF Flat',
-                                        fontSize: 13),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              // padding: EdgeInsets.symmetric(vertical: 10),
-                              child: VerticalDivider(
-                                width: 30,
-                                thickness: 2,
-                                color: Color(0xff28476E),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _.isMale.value = !_.isMale.value;
-                                });
-                              },
-                              child: Container(
-                                padding: EdgeInsets.only(right: 20),
-                                child: Center(
-                                  child: Text(
-                                    'ذكر',
-                                    style: TextStyle(
-                                        color: _.isMale.value == true ? Color(0xff28476E) : Colors.blue,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'JF Flat',
-                                        fontSize: 13),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   width: MediaQuery.of(context).size.width * 0.3,
+                      //   height: MediaQuery.of(context).size.height * 0.04,
+                      //   decoration: BoxDecoration(
+                      //       border: Border.all(
+                      //         color: Color(0xff28476E),
+                      //       ),
+                      //       borderRadius: BorderRadius.all(Radius.circular(10))),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       InkWell(
+                      //         onTap: () {
+                      //           setState(() {
+                      //             _.isMale.value = !_.isMale.value;
+                      //           });
+                      //         },
+                      //         child: Container(
+                      //           padding: EdgeInsets.only(left: 20),
+                      //           child: Center(
+                      //             // انثى text
+                      //             child: Text(
+                      //               'انثى',
+                      //               style: TextStyle(
+                      //                   color: _.isMale.value == false ? Color(0xff28476E) : Colors.blue,
+                      //                   fontWeight: FontWeight.w600,
+                      //                   fontFamily: 'JF Flat',
+                      //                   fontSize: 13),
+                      //               textAlign: TextAlign.center,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       Container(
+                      //         // padding: EdgeInsets.symmetric(vertical: 10),
+                      //         child: VerticalDivider(
+                      //           width: 30,
+                      //           thickness: 2,
+                      //           color: Color(0xff28476E),
+                      //         ),
+                      //       ),
+                      //       GestureDetector(
+                      //         onTap: () {
+                      //           setState(() {
+                      //             _.isMale.value = !_.isMale.value;
+                      //           });
+                      //         },
+                      //         child: Container(
+                      //           padding: EdgeInsets.only(right: 20),
+                      //           child: Center(
+                      //             child: Text(
+                      //               'ذكر',
+                      //               style: TextStyle(
+                      //                   color: _.isMale.value == true ? Color(0xff28476E) : Colors.blue,
+                      //                   fontWeight: FontWeight.w600,
+                      //                   fontFamily: 'JF Flat',
+                      //                   fontSize: 13),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Spacer(),
                       InkWell(
                         onTap: () {

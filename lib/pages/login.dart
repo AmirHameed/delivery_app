@@ -321,6 +321,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     InkWell(
                         onTap: () {
+                          if (Platform.isIOS) {
+                            snackbarHelper.showSnackbar(snackbar: SnackbarMessage.error(message: 'الرجاء الاتصال بجهاز Android'));
+                            return;
+                          }
                           _googleLogin();
                         },
                         child: Card(

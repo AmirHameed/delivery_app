@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DateTimePage extends StatefulWidget {
@@ -71,16 +70,14 @@ class _DateTimePageState extends State<DateTimePage> {
                                     height: 5,
                                   ),
                                   Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
+                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: Colors.white,
                                     ),
                                     child: Row(
                                       children: [
-                                        Image.asset('assets/timer.png',
-                                            fit: BoxFit.fill),
+                                        Image.asset('assets/timer.png', fit: BoxFit.fill),
                                         SizedBox(
                                           width: 15,
                                         ),
@@ -111,16 +108,14 @@ class _DateTimePageState extends State<DateTimePage> {
                                     height: 5,
                                   ),
                                   Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
+                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: Colors.white,
                                     ),
                                     child: Row(
                                       children: [
-                                        Image.asset('assets/date.png',
-                                            fit: BoxFit.fill),
+                                        Image.asset('assets/date.png', fit: BoxFit.fill),
                                         SizedBox(
                                           width: 15,
                                         ),
@@ -150,11 +145,8 @@ class _DateTimePageState extends State<DateTimePage> {
                               Expanded(
                                 flex: 5,
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  decoration: BoxDecoration(
-                                      color: Color(0xff99DEF8),
-                                      borderRadius: BorderRadius.circular(20)),
+                                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                  decoration: BoxDecoration(color: Color(0xff99DEF8), borderRadius: BorderRadius.circular(20)),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -193,11 +185,8 @@ class _DateTimePageState extends State<DateTimePage> {
                               Expanded(
                                 flex: 5,
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  decoration: BoxDecoration(
-                                      color: Color(0xff28476E),
-                                      borderRadius: BorderRadius.circular(20)),
+                                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                  decoration: BoxDecoration(color: Color(0xff28476E), borderRadius: BorderRadius.circular(20)),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -213,8 +202,7 @@ class _DateTimePageState extends State<DateTimePage> {
                                   ),
                                 ),
                               ),
-                              Expanded(
-                                  child: Image.asset('assets/location.png')),
+                              Expanded(child: Image.asset('assets/location.png')),
                             ],
                           ),
                         ),
@@ -292,17 +280,14 @@ class _DateTimePageState extends State<DateTimePage> {
                         ),
                         Container(
                           padding: EdgeInsets.symmetric(vertical: 50),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: Offset(1, 1),
-                                  spreadRadius: 2,
-                                  blurRadius: 2,
-                                  color: Colors.black12,
-                                )
-                              ]),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white, boxShadow: [
+                            BoxShadow(
+                              offset: Offset(1, 1),
+                              spreadRadius: 2,
+                              blurRadius: 2,
+                              color: Colors.black12,
+                            )
+                          ]),
                         ),
                         SizedBox(
                           height: 20,
@@ -330,8 +315,7 @@ class _DateTimePageState extends State<DateTimePage> {
                                 _showMyDialog();
                               },
                               child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 3),
+                                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                                   color: Colors.white,
                                   child: Image.asset('assets/camera.png')),
                             ),
@@ -343,8 +327,7 @@ class _DateTimePageState extends State<DateTimePage> {
                         InkWell(
                           onTap: () {},
                           child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 20.0, right: 20),
+                            padding: const EdgeInsets.only(left: 20.0, right: 20),
                             child: Card(
                               elevation: 3,
                               shape: RoundedRectangleBorder(
@@ -428,8 +411,7 @@ class _DateTimePageState extends State<DateTimePage> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
           child: Container(
             height: 200,
             padding: EdgeInsets.only(

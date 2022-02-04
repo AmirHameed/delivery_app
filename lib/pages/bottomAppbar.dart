@@ -6,6 +6,7 @@ import 'package:truckdelivery/pages/ads.dart';
 import 'package:truckdelivery/pages/homePage.dart';
 import 'package:truckdelivery/pages/invitation.dart';
 import 'package:truckdelivery/pages/messaging.dart';
+import 'package:truckdelivery/pages/orders.dart';
 import 'package:truckdelivery/pages/settings.dart';
 
 class BottomApp extends StatefulWidget {
@@ -45,7 +46,9 @@ class _BottomAppState extends State<BottomApp> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/star.png'),
+                    Icon(Icons.star_border,
+                      color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
+                    ),
                     Text(
                       "المفضلة",
                       style: TextStyle(
@@ -65,7 +68,9 @@ class _BottomAppState extends State<BottomApp> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/notify.png'),
+                    Icon(Icons.notifications_active,
+                      color: index == 1 ? Color(0xff7c5aa7) : Colors.grey,
+                    ),
                     Text(
                       "التنبيهات",
                       style: TextStyle(
@@ -85,7 +90,9 @@ class _BottomAppState extends State<BottomApp> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/home.png'),
+                   Icon(Icons.home,
+                    color: index == 2 ? Color(0xff7c5aa7) : Colors.grey,
+                   ),
                     Text(
                       "الرئيسية",
                       style: TextStyle(
@@ -105,7 +112,9 @@ class _BottomAppState extends State<BottomApp> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/messaging.png'),
+                    Icon(Icons.email,
+                      color: index == 3 ? Color(0xff7c5aa7) : Colors.grey,
+                    ),
                     Text(
                       "رسالة",
                       style: TextStyle(
@@ -125,7 +134,9 @@ class _BottomAppState extends State<BottomApp> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/document.png'),
+                    Icon(Icons.settings,
+                      color: index == 4 ? Color(0xff7c5aa7) : Colors.grey,
+                    ),
                     Text(
                       "طلباتي",
                       style: TextStyle(
