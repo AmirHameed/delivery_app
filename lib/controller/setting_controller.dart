@@ -5,6 +5,7 @@ import 'package:truckdelivery/helper/firebase_auth_helper.dart';
 import 'package:truckdelivery/helper/firebase_storage_helper.dart';
 import 'package:truckdelivery/helper/firestore_database_helper.dart';
 import 'package:truckdelivery/helper/get_storage_helper.dart';
+import 'package:truckdelivery/model/order.dart';
 import 'package:truckdelivery/model/user_model.dart';
 
 class SettingController extends GetxController {
@@ -13,7 +14,7 @@ class SettingController extends GetxController {
   FirebaseStorageHelper _firebaseStorageHelper=FirebaseStorageHelper.instance;
   FirestoreDatabaseHelper _firestoreDatabaseHelper=FirestoreDatabaseHelper.instance;
   UserModel? userModel;
-
+  List<Order> order=[];
   Future<void> logout() async {
     _firebaseAuthHelper.signout();
     getStorageHelper.clear();
@@ -24,6 +25,7 @@ class SettingController extends GetxController {
      final user=await getStorageHelper.user();
      if(user==null)return null;
      userModel=user;
+     getOrderRequest();
      update();
      notifyChildrens();
     super.onInit();
@@ -43,6 +45,21 @@ class SettingController extends GetxController {
     userModel=user;
     update();
   }
+
+  Future getOrderRequest() async {
+    final user = await getStorageHelper.user();
+    if (user == null) return null;
+    order = await _firestoreDatabaseHelper.getOrderRequest(user.id);
+    update();
+    notifyChildrens();
+  }
+  Future<void> updateOrderRequest(String id) async {
+    final previousOrder= await _firestoreDatabaseHelper.getSingleOrderRequest(id);
+    if(previousOrder==null)return;
+    final updatedOrder =previousOrder.copyWith(status: true);
+    _firestoreDatabaseHelper.updateOrder(updatedOrder);
+  }
+
 
 
 }

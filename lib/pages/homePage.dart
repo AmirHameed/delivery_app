@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              Image.asset('assets/mic.png'),
+                              // Image.asset('assets/mic.png'),
                             ],
                           ),
                         ),

@@ -6,6 +6,7 @@ import 'package:truckdelivery/pages/ads.dart';
 import 'package:truckdelivery/pages/homePage.dart';
 import 'package:truckdelivery/pages/invitation.dart';
 import 'package:truckdelivery/pages/messaging.dart';
+import 'package:truckdelivery/pages/orderRequest.dart';
 import 'package:truckdelivery/pages/orders.dart';
 import 'package:truckdelivery/pages/settings.dart';
 
@@ -15,12 +16,10 @@ class BottomApp extends StatefulWidget {
 }
 
 class _BottomAppState extends State<BottomApp> {
-  int index = 0;
+  int index = 1;
   final List<Widget> screens = [
+    OrderRequest(),
     HomePage(),
-    AdsPage(),
-    MessagingPage(),
-    InvitationPage(),
     SettingsPage()
   ];
   final PageStorageBucket bucket = PageStorageBucket();
@@ -36,45 +35,45 @@ class _BottomAppState extends State<BottomApp> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // InkWell(
+              //   onTap: () {
+              //     setState(() {
+              //       curentScreen = AdsPage();
+              //       index = 0;
+              //     });
+              //   },
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Icon(Icons.star_border,
+              //         color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
+              //       ),
+              //       Text(
+              //         "المفضلة",
+              //         style: TextStyle(
+              //           color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               InkWell(
                 onTap: () {
                   setState(() {
-                    curentScreen = AdsPage();
+                    curentScreen = OrderRequest();
                     index = 0;
                   });
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.star_border,
+                    Icon(Icons.reorder,
                       color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
                     ),
                     Text(
-                      "المفضلة",
+                      "طلباتي",
                       style: TextStyle(
                         color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    curentScreen = MessagingPage();
-                    index = 1;
-                  });
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.notifications_active,
-                      color: index == 1 ? Color(0xff7c5aa7) : Colors.grey,
-                    ),
-                    Text(
-                      "التنبيهات",
-                      style: TextStyle(
-                        color: index == 1 ? Color(0xff7c5aa7) : Colors.grey,
                       ),
                     )
                   ],
@@ -84,63 +83,63 @@ class _BottomAppState extends State<BottomApp> {
                 onTap: () {
                   setState(() {
                     curentScreen = HomePage();
-                    index = 2;
+                    index = 1;
                   });
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                    Icon(Icons.home,
-                    color: index == 2 ? Color(0xff7c5aa7) : Colors.grey,
+                    color: index == 1 ? Color(0xff7c5aa7) : Colors.grey,
                    ),
                     Text(
                       "الرئيسية",
                       style: TextStyle(
-                        color: index == 2 ? Color(0xff7c5aa7) : Colors.grey,
+                        color: index == 1 ? Color(0xff7c5aa7) : Colors.grey,
                       ),
                     ),
                   ],
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    curentScreen = MessagingPage();
-                    index = 3;
-                  });
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.email,
-                      color: index == 3 ? Color(0xff7c5aa7) : Colors.grey,
-                    ),
-                    Text(
-                      "رسالة",
-                      style: TextStyle(
-                        color: index == 3 ? Color(0xff7c5aa7) : Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // InkWell(
+              //   onTap: () {
+              //     setState(() {
+              //       curentScreen = MessagingPage();
+              //       index = 3;
+              //     });
+              //   },
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Icon(Icons.email,
+              //         color: index == 3 ? Color(0xff7c5aa7) : Colors.grey,
+              //       ),
+              //       Text(
+              //         "رسالة",
+              //         style: TextStyle(
+              //           color: index == 3 ? Color(0xff7c5aa7) : Colors.grey,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               InkWell(
                 onTap: () {
                   setState(() {
                     curentScreen = SettingsPage();
-                    index = 4;
+                    index = 2;
                   });
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.settings,
-                      color: index == 4 ? Color(0xff7c5aa7) : Colors.grey,
+                      color: index == 2 ? Color(0xff7c5aa7) : Colors.grey,
                     ),
                     Text(
-                      "طلباتي",
+                      "إعدادات",
                       style: TextStyle(
-                        color: index == 4 ? Color(0xff7c5aa7) : Colors.grey,
+                        color: index == 2 ? Color(0xff7c5aa7) : Colors.grey,
                       ),
                     ),
                   ],
@@ -152,10 +151,10 @@ class _BottomAppState extends State<BottomApp> {
       ),
       body: WillPopScope(
           onWillPop: () async{
-            if(index!=2){
+            if(index!=1){
               setState(() {
                 curentScreen = HomePage();
-                index = 2;
+                index = 1;
               });
               return false;
             }

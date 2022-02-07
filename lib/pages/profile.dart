@@ -7,7 +7,6 @@ import 'package:truckdelivery/controller/setting_controller.dart';
 import 'package:truckdelivery/helper/snackbar_helper.dart';
 import 'package:truckdelivery/model/snackbar_message.dart';
 import 'package:truckdelivery/pages/newpassword.dart';
-import 'newEmail.dart';
 
 class ProfilePage extends StatefulWidget {
   @override

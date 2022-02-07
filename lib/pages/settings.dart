@@ -159,41 +159,41 @@ class _SettingsPageState extends State<SettingsPage> {
                           padding: EdgeInsets.only(left: 10),
                           child: Column(
                             children: [
-                              InkWell(
-                                onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (ctx)=>LeftBalancePage()));
-                                },
-                                child: Card(
-                                  elevation: 3,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          'الرصيد',
-                                          textAlign: TextAlign.right,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xff28476E),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Image.asset('assets/money.png'),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // InkWell(
+                              //   onTap: (){
+                              //       Navigator.push(context, MaterialPageRoute(builder: (ctx)=>LeftBalancePage()));
+                              //   },
+                              //   child: Card(
+                              //     elevation: 3,
+                              //     shape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(20)),
+                              //     child: Container(
+                              //       padding: EdgeInsets.symmetric(
+                              //           horizontal: 20, vertical: 8),
+                              //       decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(20),
+                              //         color: Colors.white,
+                              //       ),
+                              //       child: Row(
+                              //         mainAxisAlignment: MainAxisAlignment.end,
+                              //         children: [
+                              //           Text(
+                              //             'الرصيد',
+                              //             textAlign: TextAlign.right,
+                              //             style: TextStyle(
+                              //               fontSize: 18,
+                              //               color: Color(0xff28476E),
+                              //             ),
+                              //           ),
+                              //           SizedBox(
+                              //             width: 10,
+                              //           ),
+                              //           Image.asset('assets/money.png'),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                               SizedBox(
                                 height: 3,
                               ),
@@ -230,61 +230,61 @@ class _SettingsPageState extends State<SettingsPage> {
                               SizedBox(
                                 height: 3,
                               ),
-                              InkWell(
-                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (ctx)=>AdsPage()));
-                                },
-                                child: Card(
-                                  elevation: 3,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Transform.scale(
-                                            scale: 1.3,
-                                            child: Switch(
-                                              onChanged: toggleSwitch,
-                                              value: switchControl,
-                                              activeColor: Colors.white,
-                                              activeTrackColor: Color(0xff28476E),
-                                              inactiveThumbColor: Colors.white,
-                                              inactiveTrackColor: Colors.blue,
-                                            )),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'الاشعارات',
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xff28476E),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Image.asset(
-                                                'assets/Notification.png'),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
+                              // InkWell(
+                              //      onTap: (){
+                              //       Navigator.push(context, MaterialPageRoute(builder: (ctx)=>AdsPage()));
+                              //   },
+                              //   child: Card(
+                              //     elevation: 3,
+                              //     shape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(20)),
+                              //     child: Container(
+                              //       padding: EdgeInsets.symmetric(
+                              //         horizontal: 20,
+                              //       ),
+                              //       decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(20),
+                              //         color: Colors.white,
+                              //       ),
+                              //       child: Row(
+                              //         mainAxisAlignment:
+                              //             MainAxisAlignment.spaceBetween,
+                              //         children: [
+                              //           Transform.scale(
+                              //               scale: 1.3,
+                              //               child: Switch(
+                              //                 onChanged: toggleSwitch,
+                              //                 value: switchControl,
+                              //                 activeColor: Colors.white,
+                              //                 activeTrackColor: Color(0xff28476E),
+                              //                 inactiveThumbColor: Colors.white,
+                              //                 inactiveTrackColor: Colors.blue,
+                              //               )),
+                              //           Row(
+                              //             children: [
+                              //               Text(
+                              //                 'الاشعارات',
+                              //                 textAlign: TextAlign.right,
+                              //                 style: TextStyle(
+                              //                   fontSize: 18,
+                              //                   color: Color(0xff28476E),
+                              //                 ),
+                              //               ),
+                              //               SizedBox(
+                              //                 width: 10,
+                              //               ),
+                              //               Image.asset(
+                              //                   'assets/Notification.png'),
+                              //             ],
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 3,
+                              // ),
                               GestureDetector(
                                 onTap: (){
                                   Share.share("www.truckDelivery.app.com");
@@ -323,264 +323,264 @@ class _SettingsPageState extends State<SettingsPage> {
                               SizedBox(
                                 height: 3,
                               ),
-                              Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 9),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'تقيم الخدمة',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color(0xff28476E),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Image.asset('assets/fvrt.png'),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              // Card(
+                              //   elevation: 3,
+                              //   shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(20)),
+                              //   child: Container(
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: 17, vertical: 9),
+                              //     decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(20),
+                              //       color: Colors.white,
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.end,
+                              //       children: [
+                              //         Text(
+                              //           'تقيم الخدمة',
+                              //           textAlign: TextAlign.right,
+                              //           style: TextStyle(
+                              //             fontSize: 18,
+                              //             color: Color(0xff28476E),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 10,
+                              //         ),
+                              //         Image.asset('assets/fvrt.png'),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                               SizedBox(
                                 height: 3,
                               ),
-                              Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 9),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'انضم الى الفريق',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color(0xff28476E),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Image.asset('assets/groupUser.png'),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              // Card(
+                              //   elevation: 3,
+                              //   shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(20)),
+                              //   child: Container(
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: 16, vertical: 9),
+                              //     decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(20),
+                              //       color: Colors.white,
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.end,
+                              //       children: [
+                              //         Text(
+                              //           'انضم الى الفريق',
+                              //           textAlign: TextAlign.right,
+                              //           style: TextStyle(
+                              //             fontSize: 18,
+                              //             color: Color(0xff28476E),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 10,
+                              //         ),
+                              //         Image.asset('assets/groupUser.png'),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                               SizedBox(
                                 height: 3,
                               ),
-                              Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 14, vertical: 9),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'الشروط والاحكام',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color(0xff28476E),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Image.asset('assets/docs.png'),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              // Card(
+                              //   elevation: 3,
+                              //   shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(20)),
+                              //   child: Container(
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: 14, vertical: 9),
+                              //     decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(20),
+                              //       color: Colors.white,
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.end,
+                              //       children: [
+                              //         Text(
+                              //           'الشروط والاحكام',
+                              //           textAlign: TextAlign.right,
+                              //           style: TextStyle(
+                              //             fontSize: 18,
+                              //             color: Color(0xff28476E),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 10,
+                              //         ),
+                              //         Image.asset('assets/docs.png'),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                               SizedBox(
                                 height: 3,
                               ),
-                              Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 14, vertical: 9),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'عن التطبيق',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color(0xff28476E),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Image.asset('assets/required.png'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Card(
-                                      elevation: 3,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      child: Container(
-                                        padding: EdgeInsets.only(
-                                          left: 20,
-                                          right: 5,
-                                          top: 9,
-                                          bottom: 9,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: Colors.white,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                              'اتصل بنا',
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xff28476E),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Image.asset('assets/phone.png'),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Expanded(
-                                    child: Card(
-                                      elevation: 3,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      child: Container(
-                                        padding: EdgeInsets.only(
-                                          left: 30,
-                                          right: 5,
-                                          top: 9,
-                                          bottom: 9,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: Colors.white,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                              'اللغة',
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xff28476E),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Image.asset('assets/internet.png'),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: InkWell(
-                                  onTap: () {
-                                    _showMyDialog();
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 14, vertical: 9),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          'إضافة رمز دعوة',
-                                          textAlign: TextAlign.right,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xff28476E),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Image.asset('assets/letter.png'),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              // Card(
+                              //   elevation: 3,
+                              //   shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(20)),
+                              //   child: Container(
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: 14, vertical: 9),
+                              //     decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(20),
+                              //       color: Colors.white,
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.end,
+                              //       children: [
+                              //         Text(
+                              //           'عن التطبيق',
+                              //           textAlign: TextAlign.right,
+                              //           style: TextStyle(
+                              //             fontSize: 18,
+                              //             color: Color(0xff28476E),
+                              //           ),
+                              //         ),
+                              //         SizedBox(
+                              //           width: 10,
+                              //         ),
+                              //         Image.asset('assets/required.png'),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 5,
+                              // ),
+                              // Row(
+                              //   children: [
+                              //     Expanded(
+                              //       child: Card(
+                              //         elevation: 3,
+                              //         shape: RoundedRectangleBorder(
+                              //             borderRadius:
+                              //                 BorderRadius.circular(20)),
+                              //         child: Container(
+                              //           padding: EdgeInsets.only(
+                              //             left: 20,
+                              //             right: 5,
+                              //             top: 9,
+                              //             bottom: 9,
+                              //           ),
+                              //           decoration: BoxDecoration(
+                              //             borderRadius:
+                              //                 BorderRadius.circular(20),
+                              //             color: Colors.white,
+                              //           ),
+                              //           child: Row(
+                              //             mainAxisAlignment:
+                              //                 MainAxisAlignment.spaceEvenly,
+                              //             children: [
+                              //               Text(
+                              //                 'اتصل بنا',
+                              //                 textAlign: TextAlign.right,
+                              //                 style: TextStyle(
+                              //                   fontSize: 18,
+                              //                   color: Color(0xff28476E),
+                              //                 ),
+                              //               ),
+                              //               SizedBox(
+                              //                 width: 10,
+                              //               ),
+                              //               Image.asset('assets/phone.png'),
+                              //             ],
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     SizedBox(
+                              //       width: 15,
+                              //     ),
+                              //     // Expanded(
+                              //     //   child: Card(
+                              //     //     elevation: 3,
+                              //     //     shape: RoundedRectangleBorder(
+                              //     //         borderRadius:
+                              //     //             BorderRadius.circular(20)),
+                              //     //     child: Container(
+                              //     //       padding: EdgeInsets.only(
+                              //     //         left: 30,
+                              //     //         right: 5,
+                              //     //         top: 9,
+                              //     //         bottom: 9,
+                              //     //       ),
+                              //     //       decoration: BoxDecoration(
+                              //     //         borderRadius:
+                              //     //             BorderRadius.circular(20),
+                              //     //         color: Colors.white,
+                              //     //       ),
+                              //     //       child: Row(
+                              //     //         mainAxisAlignment:
+                              //     //             MainAxisAlignment.spaceEvenly,
+                              //     //         children: [
+                              //     //           Text(
+                              //     //             'اللغة',
+                              //     //             textAlign: TextAlign.right,
+                              //     //             style: TextStyle(
+                              //     //               fontSize: 18,
+                              //     //               color: Color(0xff28476E),
+                              //     //             ),
+                              //     //           ),
+                              //     //           SizedBox(
+                              //     //             width: 10,
+                              //     //           ),
+                              //     //           Image.asset('assets/internet.png'),
+                              //     //         ],
+                              //     //       ),
+                              //     //     ),
+                              //     //   ),
+                              //     // ),
+                              //   ],
+                              // ),
+                              // SizedBox(
+                              //   height: 5,
+                              // ),
+                              // Card(
+                              //   elevation: 3,
+                              //   shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(20)),
+                              //   child: InkWell(
+                              //     onTap: () {
+                              //       _showMyDialog();
+                              //     },
+                              //     child: Container(
+                              //       padding: EdgeInsets.symmetric(
+                              //           horizontal: 14, vertical: 9),
+                              //       decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(20),
+                              //         color: Colors.white,
+                              //       ),
+                              //       child: Row(
+                              //         mainAxisAlignment: MainAxisAlignment.end,
+                              //         children: [
+                              //           Text(
+                              //             'إضافة رمز دعوة',
+                              //             textAlign: TextAlign.right,
+                              //             style: TextStyle(
+                              //               fontSize: 18,
+                              //               color: Color(0xff28476E),
+                              //             ),
+                              //           ),
+                              //           SizedBox(
+                              //             width: 10,
+                              //           ),
+                              //           Image.asset('assets/letter.png'),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 10,
+                              // ),
                               GestureDetector(
                                 onTap: (){
                                   _.logout();
