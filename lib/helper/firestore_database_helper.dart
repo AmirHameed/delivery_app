@@ -62,6 +62,21 @@ class FirestoreDatabaseHelper {
     }
     return order.values.toList();
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getOrders(String userId,String orderId) {
+    return _firebaseFirestore
+        .collection(_ORDER)
+        .where('user_id', isEqualTo: userId)
+        .where('status', isEqualTo: false)
+        .where('order_id',isEqualTo: orderId)
+        .snapshots();
+  }
+  Stream<QuerySnapshot<Map<String, dynamic>>> myMessage(String chatId) => _firebaseFirestore
+      .collection(_CHAT)
+      .where('chat_id', isEqualTo: chatId)
+      .orderBy('time_stamp', descending: true)
+      .snapshots();
+
   Future<UserModel?> getUser(String id) async {
       final documentReference = await _firebaseFirestore.collection(_USER).doc(id).get().timeout(_timeoutDuration);
       if (documentReference.data() == null) return null;
@@ -87,8 +102,8 @@ class FirestoreDatabaseHelper {
     final documentReference = await _firebaseFirestore.collection(_RENT_CAR).add(rentCar.toJson()).timeout(_timeoutDuration);
     return rentCar.copyWith(id: documentReference.id);
   }
-  Future<void> updateOrder(Order order) =>
-      _firebaseFirestore.collection(_ORDER).doc(order.id).update(order.toJson()).timeout(_timeoutDuration);
+  Future<void> updateOrder(String id) =>
+      _firebaseFirestore.collection(_ORDER).doc(id).update({'status':true}).timeout(_timeoutDuration);
   Future<void> updateUser(UserModel user) =>
       _firebaseFirestore.collection(_USER).doc(user.id).update(user.toJson()).timeout(_timeoutDuration);
 }

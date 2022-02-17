@@ -24,8 +24,8 @@ class _DeliveryState extends State<Delivery> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: GetBuilder<DeliveryController>(builder: (_deliveryController) {
-          final kInitialPosition = LatLng(_deliveryController.position!.latitude, _deliveryController.position!.longitude);
-
+          final kInitialPosition =
+              LatLng(_deliveryController.position?.latitude ?? 0, _deliveryController.position?.longitude ?? 0);
           return Stack(
             children: [
               Padding(

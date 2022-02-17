@@ -6,6 +6,7 @@ import 'package:truckdelivery/helper/material_dialog_content.dart';
 import 'package:truckdelivery/helper/material_dialog_helper.dart';
 import 'package:truckdelivery/helper/snackbar_helper.dart';
 import 'package:truckdelivery/model/snackbar_message.dart';
+import 'package:truckdelivery/pages/orderRequest.dart';
 
 class PaymentMethod extends StatefulWidget {
   final int isOutCity;
@@ -32,14 +33,16 @@ class _PaymentMethodState extends State<PaymentMethod> {
       return;
     }
     final snackbar = SnackbarHelper.instance..injectContext(context);
-    if (message.isEmpty) {
-      snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: message));
-      return;
-    }
-    snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تمت إضافة الطلب بنجاح..!'));
+    // if (message.isEmpty) {
+    //   snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: message));
+    //   return;
+    // }
+    // snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تمت إضافة الطلب بنجاح..!'));
     //Navigator.push(context, MaterialPageRoute(builder: (ctx) => BottomApp()));
     Navigator.pop(context);
     Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) => TimerClass(parcelId: message.id,)));
+
     // Future.delayed(const Duration(milliseconds: 700))
     //     .then((_) => Navigator.pushNamedAndRemoveUntil(context, MainScreen.route, (route) => false));
   }
@@ -55,13 +58,15 @@ class _PaymentMethodState extends State<PaymentMethod> {
       return;
     }
     final snackbar = SnackbarHelper.instance..injectContext(context);
-    if (message.isEmpty) {
-      snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: message));
-      return;
-    }
-    snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تمت إضافة الطلب بنجاح..!'));
-    int count=0;
+    // if (message.isEmpty) {
+    //   snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: message));
+    //   return;
+    // }
+    // snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تمت إضافة الطلب بنجاح..!'));
+     int count=0;
     Navigator.popUntil(context,(_)=>count++==4);
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) => TimerClass(parcelId: message.id,)));
+
   }
 
   List<String> _items = [

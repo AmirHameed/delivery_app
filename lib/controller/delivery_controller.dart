@@ -105,7 +105,7 @@ class DeliveryController extends GetxController {
     super.onInit();
   }
 
-  Future<String?> addParcel(int isOutCity) async {
+  Future<Parcel?> addParcel(int isOutCity) async {
     final user = await currentUser;
     if (user == null) return null;
     final parcel = Parcel.initial(
@@ -123,15 +123,14 @@ class DeliveryController extends GetxController {
         pickAddress: pickselectedPlace!.formattedAddress.toString());
     try {
       final parcelBet = await _firestoreDatabaseHelper.addParcel(parcel);
-      if (parcelBet.id.isEmpty) return '';
       mobileNumber.clear();
-      return parcelBet.id;
+      return parcelBet;
     } catch (_) {
       return null;
     }
   }
 
-  Future<String?> addFurniture(
+  Future<Furniture?> addFurniture(
       int isOutCity, String pickDropdown, String dropDropdown, String catTitle, int numberOfPerson) async {
     final user = await currentUser;
     if (user == null) return null;
@@ -154,9 +153,8 @@ class DeliveryController extends GetxController {
         pickAddress: pickselectedPlace!.formattedAddress.toString());
     try {
       final parcelBet = await _firestoreDatabaseHelper.addFurniture(furniture);
-      if (parcelBet.id.isEmpty) return '';
       description.clear();
-      return parcelBet.id;
+      return parcelBet;
     } catch (_) {
       return null;
     }

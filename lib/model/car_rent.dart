@@ -11,6 +11,7 @@ class RentCar {
   final String carImage;
   final String date;
   final String time;
+  final bool status;
   final num amountPerKilo;
   final String carTitle;
   final String mobileNumber;
@@ -30,6 +31,7 @@ class RentCar {
       required this.carTitle,
       required this.carImage,
       required this.date,
+      required this.status,
       required this.time,
       required this.amountPerKilo,
       required this.id,
@@ -69,6 +71,7 @@ class RentCar {
             carTitle: carTitle,
             carImage: carImage,
             date: date,
+            status: false,
             time: time,
             amountPerKilo: amountPerKilo,
             amount: amount,
@@ -88,6 +91,7 @@ class RentCar {
     final paymentMethod = json['payment_method'];
     final amount = json['amount'];
     final description = json['description'];
+    final status = json['status'] ? json['status'] : false;
     final carTitle = json['car_title'];
     final carImage = json['car_image'];
     final date = json['date'];
@@ -107,6 +111,7 @@ class RentCar {
         id: id,
         description: description,
         carTitle: carTitle,
+        status: status,
         carImage: carImage,
         amountPerKilo: amountPerKilo,
         date: date,
@@ -116,7 +121,7 @@ class RentCar {
         pickAddress: pickAddress);
   }
 
-  RentCar copyWith({String? id}) => RentCar(
+  RentCar copyWith({String? id,bool? status}) => RentCar(
       creatorId: creatorId,
       pickLocationLat: pickLocationLat,
       pickLocationLong: pickLocationLong,
@@ -126,6 +131,7 @@ class RentCar {
       mobileNumber: mobileNumber,
       isParseOutCity: isParseOutCity,
       amount: amount,
+      status: status??this.status,
       id: id ?? this.id,
       description: description,
       carTitle: carTitle,
@@ -148,6 +154,7 @@ class RentCar {
         'is_parse_out_city': isParseOutCity,
         'payment_method': paymentMethod,
         'amount': amount,
+        'status':status,
         'description': description,
         'car_title': carTitle,
         'date': date,

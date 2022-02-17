@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:truckdelivery/helper/firebase_auth_helper.dart';
@@ -7,6 +8,7 @@ import 'package:truckdelivery/helper/firestore_database_helper.dart';
 import 'package:truckdelivery/helper/get_storage_helper.dart';
 import 'package:truckdelivery/model/order.dart';
 import 'package:truckdelivery/model/user_model.dart';
+import 'package:truckdelivery/model/user_model2.dart';
 
 class SettingController extends GetxController {
   FirebaseAuthHelper _firebaseAuthHelper = FirebaseAuthHelper.instance;
@@ -14,6 +16,7 @@ class SettingController extends GetxController {
   FirebaseStorageHelper _firebaseStorageHelper=FirebaseStorageHelper.instance;
   FirestoreDatabaseHelper _firestoreDatabaseHelper=FirestoreDatabaseHelper.instance;
   UserModel? userModel;
+  Stream<QuerySnapshot<Map<String, dynamic>>>? _stream;
   List<Order> order=[];
   Future<void> logout() async {
     _firebaseAuthHelper.signout();
@@ -25,7 +28,6 @@ class SettingController extends GetxController {
      final user=await getStorageHelper.user();
      if(user==null)return null;
      userModel=user;
-     getOrderRequest();
      update();
      notifyChildrens();
     super.onInit();
@@ -46,18 +48,50 @@ class SettingController extends GetxController {
     update();
   }
 
-  Future getOrderRequest() async {
+  // Future getOrderRequest() async {
+  //   final user = await getStorageHelper.user();
+  //   if (user == null) return null;
+  //   order = await _firestoreDatabaseHelper.getOrderRequest(user.id);
+  //   update();
+  //   notifyChildrens();
+  // }
+
+  Future getOrders(String orderId) async {
     final user = await getStorageHelper.user();
-    if (user == null) return null;
-    order = await _firestoreDatabaseHelper.getOrderRequest(user.id);
-    update();
-    notifyChildrens();
+    if (user == null) return;
+    _stream = null;
+    _stream =  _firestoreDatabaseHelper.getOrders(user.id,orderId);
+    _stream?.listen((event) async {
+      final documentReferences = event.docChanges;
+
+      final orders = <String, Order>{};
+      for (final data in documentReferences) {
+        if (orders[data.doc.id] != null) continue;
+        UserModelRider? userModel = await _firestoreDatabaseHelper.getRider(data.doc.data()!['creator_id']);
+        if (userModel != null) {
+          final orderss = Order.fromJson(data.doc.data()!, data.doc.id, userModel);
+          orders[data.doc.id] = orderss;
+        } else {
+          final orderss = Order.fromJson(data.doc.data()!, data.doc.id,UserModelRider.fromJson({'id': ''}));
+          orders[data.doc.id] = orderss;
+        }
+      }
+      final orderValue=orders.values.toList();
+      order.isEmpty ? order.addAll(orderValue) : order.insertAll(0, orderValue);
+      update();
+      notifyChildrens();
+      print('parcels');
+      print(order);
+    }, onError: (e,s) {
+      print(e);
+      print(s);
+      print("onError");
+    });
   }
+
+
   Future<void> updateOrderRequest(String id) async {
-    final previousOrder= await _firestoreDatabaseHelper.getSingleOrderRequest(id);
-    if(previousOrder==null)return;
-    final updatedOrder =previousOrder.copyWith(status: true);
-    _firestoreDatabaseHelper.updateOrder(updatedOrder);
+    _firestoreDatabaseHelper.updateOrder(id);
   }
 
 

@@ -1,16 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:get/get.dart';
 import 'package:truckdelivery/controller/setting_controller.dart';
 import 'package:truckdelivery/pages/localDriver.dart';
-import 'package:truckdelivery/pages/outsideDriver.dart';
-import 'package:truckdelivery/pages/paymethod.dart';
 import 'package:truckdelivery/pages/profile.dart';
 import 'package:truckdelivery/pages/shifting.dart';
-
 import 'delivery.dart';
 
 class HomePage extends StatefulWidget {
@@ -143,7 +138,13 @@ class _HomePageState extends State<HomePage> {
                                   Expanded(
                                       child: InkWell(
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity: 0,carTile: '',)));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (ctx) => Delivery(
+                                                    isOutCity: 0,
+                                                    carTile: '',
+                                                  )));
                                     },
                                     child: myContainer('شحن طرود ( خارج المدينة )', 'assets/home1.png'),
                                   )),
@@ -153,7 +154,13 @@ class _HomePageState extends State<HomePage> {
                                   Expanded(
                                       child: InkWell(
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity: 1,carTile: '',)));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (ctx) => Delivery(
+                                                    isOutCity: 1,
+                                                    carTile: '',
+                                                  )));
                                     },
                                     child: myContainer('ارسال واستقبال طرود', 'assets/home2.png'),
                                   )),
@@ -162,19 +169,29 @@ class _HomePageState extends State<HomePage> {
                               SizedBox(height: 15),
                               Row(
                                 children: [
-                                  Expanded(child: GestureDetector(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => Shifting(isOutFurniture: true,)));
-
-                                      },
-                                      child: myContainer('شحن عفش ( خارج المدينة )', 'assets/home3.png'))),
+                                  Expanded(
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (ctx) => Shifting(
+                                                          isOutFurniture: true,
+                                                        )));
+                                          },
+                                          child: myContainer('شحن عفش ( خارج المدينة )', 'assets/home3.png'))),
                                   SizedBox(
                                     width: 10,
                                   ),
                                   Expanded(
                                       child: InkWell(
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Shifting(isOutFurniture: false,)));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (ctx) => Shifting(
+                                                    isOutFurniture: false,
+                                                  )));
                                     },
                                     child: myContainer('نقل عفش', 'assets/home4.png'),
                                   )),
@@ -186,7 +203,12 @@ class _HomePageState extends State<HomePage> {
                                   Expanded(
                                       child: InkWell(
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => LocalDriver(isOutTruck: true,)));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (ctx) => LocalDriver(
+                                                    isOutTruck: true,
+                                                  )));
                                     },
                                     child: myContainer(' سطحة ( خارج المدينة )', 'assets/home5.png'),
                                   )),
@@ -196,8 +218,13 @@ class _HomePageState extends State<HomePage> {
                                   Expanded(
                                       child: InkWell(
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => LocalDriver(isOutTruck: false,)));
-                                      },
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (ctx) => LocalDriver(
+                                                    isOutTruck: false,
+                                                  )));
+                                    },
                                     child: myContainer('سطحة ( داخل المدينة )', 'assets/home6.png'),
                                   )),
                                 ],
@@ -227,8 +254,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-
 
   Widget myContainer(String text, image) {
     return Container(
