@@ -77,6 +77,7 @@ class SettingController extends GetxController {
         }
       }
       final orderValue=orders.values.toList();
+      order.clear();
       order.isEmpty ? order.addAll(orderValue) : order.insertAll(0, orderValue);
       update();
       notifyChildrens();
@@ -94,6 +95,8 @@ class SettingController extends GetxController {
     _firestoreDatabaseHelper.updateOrder(id);
   }
 
-
+  Future<void> updateReviews(String id,num reviews,num totalCount) async {
+    _firestoreDatabaseHelper.updateOrder(id);
+  }
 
 }

@@ -6,23 +6,38 @@ class Order {
   final String orderId;
   final String userId;
   final String prize;
+  final num lat;
+  final num long;
   final bool status;
   final String orderStatus;
 
-  Order({required this.creatorId, required this.id, required this.orderId, required this.userId, required this.prize,required this.status,required this.orderStatus});
+  Order(
+      {required this.creatorId,
+      required this.id,
+      required this.orderId,
+      required this.userId,
+      required this.prize,
+      required this.lat,
+      required this.long,
+      required this.status,
+      required this.orderStatus});
 
   Order.initial({
     required creatorId,
     required orderId,
     required userId,
+    required lat,
+    required long,
     required prize,
   }) : this(
           creatorId: UserModelRider.fromJson({'id': creatorId}),
           orderId: orderId,
           userId: userId,
           prize: prize,
-          status:false,
-          orderStatus:'موقع الإستلام',
+          lat: lat,
+          long: long,
+          status: false,
+          orderStatus: 'موقع الإستلام',
           id: '',
         );
 
@@ -30,7 +45,9 @@ class Order {
     final orderId = json['order_id'];
     final userId = json['user_id'];
     final prize = json['prize'];
-    final status=json.containsKey('status')? json['status']:'';
+    final lat = json.containsKey('lat') ? json['lat'] : 0;
+    final long = json.containsKey('long') ? json['long'] : 0;
+    final status = json.containsKey('status') ? json['status'] : '';
     final orderStatus = json.containsKey('order_status') ? json['order_status'] : '';
 
     return Order(
@@ -38,19 +55,27 @@ class Order {
       orderId: orderId,
       userId: userId,
       status: status,
+      lat: lat,
+      long: long,
       orderStatus: orderStatus,
       prize: prize,
       id: id,
     );
   }
 
-  Order copyWith({String? id,bool?status,}) => Order(
+  Order copyWith({
+    String? id,
+    bool? status,
+  }) =>
+      Order(
         creatorId: creatorId,
         orderId: orderId,
         userId: userId,
         prize: prize,
-        status: status??this.status,
-        orderStatus:orderStatus,
+        lat: lat,
+        long: long,
+        status: status ?? this.status,
+        orderStatus: orderStatus,
         id: id ?? this.id,
       );
 
@@ -59,7 +84,9 @@ class Order {
         'user_id': userId,
         'order_id': orderId,
         'prize': prize,
-    'order_status':orderStatus,
-        'status':status
+        'lat': lat,
+        'long': long,
+        'order_status': orderStatus,
+        'status': status
       };
 }

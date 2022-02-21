@@ -104,6 +104,10 @@ class FirestoreDatabaseHelper {
   }
   Future<void> updateOrder(String id) =>
       _firebaseFirestore.collection(_ORDER).doc(id).update({'status':true}).timeout(_timeoutDuration);
+
+  Future<void> updateReviews(String id,num reviews,num totalNumber) =>
+      _firebaseFirestore.collection(USER_RIDER).doc(id).update({'reviews':reviews,'totalCount':totalNumber}).timeout(_timeoutDuration);
+
   Future<void> updateUser(UserModel user) =>
       _firebaseFirestore.collection(_USER).doc(user.id).update(user.toJson()).timeout(_timeoutDuration);
 }

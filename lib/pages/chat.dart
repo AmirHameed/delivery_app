@@ -12,7 +12,7 @@ import 'package:truckdelivery/helper/firestore_database_helper.dart';
 import 'package:truckdelivery/helper/get_storage_helper.dart';
 import 'package:truckdelivery/model/chat.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 class Chatapp extends StatefulWidget {
   final int index;
@@ -27,6 +27,7 @@ class _ChatappState extends State<Chatapp> {
   final GetStorageHelper getStorageHelper = GetStorageHelper.instance;
   final FirestoreDatabaseHelper _firestoreDatabaseHelper=FirestoreDatabaseHelper.instance;
   SettingController orderController = Get.find();
+  num reviwesValue=0;
   Stream<QuerySnapshot<Map<String, dynamic>>>? _stream;
   final List<Chat> _chat = <Chat>[];
 
@@ -285,7 +286,7 @@ class _ChatappState extends State<Chatapp> {
                                                      )),
                                                  GestureDetector(
                                                    onTap: () {
-                                                     _makePhoneCall(value.order[0].creatorId.phone);
+                                                     //_makePhoneCall(value.order[0].creatorId.phone);
                                                    },
                                                    child: Container(
                                                      padding: const EdgeInsets.symmetric(
@@ -526,101 +527,107 @@ class _ChatappState extends State<Chatapp> {
               height: MediaQuery.of(context).size.height * 0.32,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                child: Column(
-                  children: [
-                    const Text(
-                      'كيف كانت تجربتك',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const Text(
-                      'محمد',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    RatingBar.builder(
-                      initialRating: 3,
-                      itemSize: 18,
-                      minRating: 1,
-                      unratedColor: Colors.grey[300],
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
+                child: GetBuilder<SettingController>(
+                  builder: (value)=>
+                  Column(
+                    children: [
+                      const Text(
+                        'كيف كانت تجربتك',
+                        style:
+                            TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      onRatingUpdate: (rating) {
-                      },
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        decoration: BoxDecoration(
-                           borderRadius: BorderRadius.circular(30),
-                          border: Border.all( color: const Color(0xff990000),),
+                       Text(
+                        value.order[0].creatorId.firstName,
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      RatingBar.builder(
+                        initialRating: 3,
+                        itemSize: 18,
+                        minRating: 1,
+                        unratedColor: Colors.grey[300],
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
                         ),
-                        child: const TextField(
-                          maxLength: 8,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '.... اكتب تقيمك ( اختياري )',
-                              hintStyle: TextStyle(fontSize: 12)),
-                        )),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                       const Text(
-                      'ليس الان',
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 15,  color: Color(0xff990000),fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(width: 20,),
-                      InkWell(
-                          onTap: () {
-                            //  Navigator.push(
-                            // context, MaterialPageRoute(builder: (ctx) => DukanPage()));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                color: const Color(0xffEF0000)),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 40),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                gradient: const LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Color(0xffEF0000),
-                                      Colors.purple,
-                                    ]),
-                                color: const Color(0xff6A007D),
-                              ),
-                              child: const Text(
-                                'تم',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
+                        onRatingUpdate: (rating) {
+                          print('rating$rating');
+                          reviwesValue=rating;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          decoration: BoxDecoration(
+                             borderRadius: BorderRadius.circular(30),
+                            border: Border.all( color: const Color(0xff990000),),
+                          ),
+                          child: const TextField(
+                            maxLength: 8,
+                            textAlign: TextAlign.right,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '.... اكتب تقيمك ( اختياري )',
+                                hintStyle: TextStyle(fontSize: 12)),
                           )),
-                    ])
-                  ],
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                         const Text(
+                        'ليس الان',
+                        textAlign: TextAlign.center,
+                        style:
+                            TextStyle(fontSize: 15,  color: Color(0xff990000),fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 20,),
+                        InkWell(
+                            onTap: () {
+                              num privoiusReviews=value.order[0].creatorId.reviews;
+                              num pretotalvalue=value.order[0].creatorId.totalCount;
+                             value.updateReviews(value.order[0].creatorId.id, privoiusReviews+reviwesValue, pretotalvalue+1);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: const Color(0xffEF0000)),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 40),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  gradient: const LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color(0xffEF0000),
+                                        Colors.purple,
+                                      ]),
+                                  color: const Color(0xff6A007D),
+                                ),
+                                child: const Text(
+                                  'تم',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            )),
+                      ])
+                    ],
+                  ),
                 ),
               ),
             ));
@@ -628,13 +635,13 @@ class _ChatappState extends State<Chatapp> {
     );
   }
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    await launch(launchUri.toString());
-  }
+  // Future<void> _makePhoneCall(String phoneNumber) async {
+  //   final Uri launchUri = Uri(
+  //     scheme: 'tel',
+  //     path: phoneNumber,
+  //   );
+  //   await launch(launchUri.toString());
+  // }
 }
 class MessageBox extends StatelessWidget {
   final Chat chat;

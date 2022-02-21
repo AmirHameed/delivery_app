@@ -15,6 +15,7 @@ class UserModelRider {
       nationality,
       age;
   final bool gender, online;
+  final num reviews, totalCount;
 
   UserModelRider(
       {required this.firstName,
@@ -32,6 +33,8 @@ class UserModelRider {
       required this.online,
       required this.nationality,
       required this.idNumber,
+      required this.reviews,
+      required this.totalCount,
       required this.phone,
       required this.gender});
 
@@ -51,6 +54,8 @@ class UserModelRider {
     final idNumber = json['id_number'];
     final id = json['id'];
     final type = json.containsKey('type') ? json['type'] : '';
+    final reviews = json.containsKey('reviews') ? json['reviews'] : 0;
+    final totalCount = json.containsKey('totalCount') ? json['totalCount'] : 0;
     final gender = json['gender'];
     final phone = json['phone'];
 
@@ -64,6 +69,8 @@ class UserModelRider {
         gender: gender,
         type: type,
         age: age,
+        reviews: reviews,
+        totalCount: totalCount,
         carBackImage: carBackImage,
         carFrontImage: carFrontImage,
         idImage: idImage,
@@ -91,11 +98,15 @@ class UserModelRider {
           bool? gender,
           String? serviceType,
           String? phone,
+          num? reviews,
+          num? totalCount,
           String? licenseImage}) =>
       UserModelRider(
           type: type,
           yourImage: yourImage ?? this.yourImage,
           age: age ?? this.age,
+          totalCount: totalCount ?? this.totalCount,
+          reviews: reviews ?? this.reviews,
           carBackImage: carBackImage ?? this.carBackImage,
           carFrontImage: carFrontImage ?? this.carFrontImage,
           idImage: idImage ?? this.idImage,
@@ -126,6 +137,8 @@ class UserModelRider {
         'nationality': nationality,
         'phone': phone,
         'type': type,
+        'reviews': reviews,
+        'totalCount': totalCount,
         'gender': gender,
         'online': online,
         'service_Type': serviceType,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:truckdelivery/constant.dart';
 import 'package:truckdelivery/pages/ads.dart';
 import 'package:truckdelivery/pages/homePage.dart';
 import 'package:truckdelivery/pages/invitation.dart';
@@ -16,10 +17,12 @@ class BottomApp extends StatefulWidget {
 }
 
 class _BottomAppState extends State<BottomApp> {
-  int index = 1;
+  int index = 2;
   final List<Widget> screens = [
-    OrderRequest(),
+    AdsPage(),
+    MessagingPage(),
     HomePage(),
+    InvitationPage(),
     SettingsPage()
   ];
   final PageStorageBucket bucket = PageStorageBucket();
@@ -35,45 +38,47 @@ class _BottomAppState extends State<BottomApp> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // InkWell(
-              //   onTap: () {
-              //     setState(() {
-              //       curentScreen = AdsPage();
-              //       index = 0;
-              //     });
-              //   },
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Icon(Icons.star_border,
-              //         color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
-              //       ),
-              //       Text(
-              //         "المفضلة",
-              //         style: TextStyle(
-              //           color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               InkWell(
                 onTap: () {
                   setState(() {
-                    curentScreen = OrderRequest();
+                    curentScreen = AdsPage();
                     index = 0;
                   });
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.reorder,
-                      color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
-                    ),
+                    Image.asset('assets/star.png',color: index == 0 ? blueColor : Colors.grey,),
+                    // Icon(Icons.star_border,
+                    //   color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
+                    // ),
                     Text(
-                      "طلباتي",
+                      "المفضلة",
                       style: TextStyle(
-                        color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
+                        color: index == 0 ? blueColor : Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    curentScreen = MessagingPage();
+                    index = 1;
+                  });
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/notify.png',color: index == 1 ? blueColor : Colors.grey,),
+                    // Icon(Icons.notifications_active,
+                    //   color: index == 1 ? Color(0xff7c5aa7) : Colors.grey,
+                    // ),
+                    Text(
+                      "التنبيهات",
+                      style: TextStyle(
+                        color: index == 1 ? blueColor : Colors.grey,
                       ),
                     )
                   ],
@@ -83,63 +88,66 @@ class _BottomAppState extends State<BottomApp> {
                 onTap: () {
                   setState(() {
                     curentScreen = HomePage();
-                    index = 1;
-                  });
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                   Icon(Icons.home,
-                    color: index == 1 ? Color(0xff7c5aa7) : Colors.grey,
-                   ),
-                    Text(
-                      "الرئيسية",
-                      style: TextStyle(
-                        color: index == 1 ? Color(0xff7c5aa7) : Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // InkWell(
-              //   onTap: () {
-              //     setState(() {
-              //       curentScreen = MessagingPage();
-              //       index = 3;
-              //     });
-              //   },
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Icon(Icons.email,
-              //         color: index == 3 ? Color(0xff7c5aa7) : Colors.grey,
-              //       ),
-              //       Text(
-              //         "رسالة",
-              //         style: TextStyle(
-              //           color: index == 3 ? Color(0xff7c5aa7) : Colors.grey,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    curentScreen = SettingsPage();
                     index = 2;
                   });
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.settings,
-                      color: index == 2 ? Color(0xff7c5aa7) : Colors.grey,
-                    ),
+                    Image.asset('assets/home.png',color: index == 2 ? blueColor : Colors.grey,),
+                    // Icon(Icons.home,
+                    //   color: index == 2 ? Color(0xff7c5aa7) : Colors.grey,
+                    // ),
                     Text(
-                      "إعدادات",
+                      "الرئيسية",
                       style: TextStyle(
-                        color: index == 2 ? Color(0xff7c5aa7) : Colors.grey,
+                        color: index == 2 ?blueColor : Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    curentScreen = MessagingPage();
+                    index = 3;
+                  });
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/messaging.png',color: index == 3 ? blueColor : Colors.grey,),
+                    // Icon(Icons.email,
+                    //   color: index == 3 ? Color(0xff7c5aa7) : Colors.grey,
+                    // ),
+                    Text(
+                      "رسالة",
+                      style: TextStyle(
+                        color: index == 3 ? blueColor : Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    curentScreen = SettingsPage();
+                    index = 4;
+                  });
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/document.png',color: index == 4 ? blueColor : Colors.grey,),
+                    // Icon(Icons.settings,
+                    //   color: index == 4 ? Color(0xff7c5aa7) : Colors.grey,
+                    // ),
+                    Text(
+                      "طلباتي",
+                      style: TextStyle(
+                        color: index == 4 ? blueColor : Colors.grey,
                       ),
                     ),
                   ],
@@ -151,10 +159,10 @@ class _BottomAppState extends State<BottomApp> {
       ),
       body: WillPopScope(
           onWillPop: () async{
-            if(index!=1){
+            if(index!=2){
               setState(() {
                 curentScreen = HomePage();
-                index = 1;
+                index = 2;
               });
               return false;
             }

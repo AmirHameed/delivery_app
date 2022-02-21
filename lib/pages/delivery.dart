@@ -31,7 +31,7 @@ class _DeliveryState extends State<Delivery> {
               Padding(
                 padding: const EdgeInsets.only(top: 60),
                 child: PlacePicker(
-                  apiKey: 'AIzaSyDeX7maRqimkPJPhvxKEy-uTNyV0IhVzlQ',
+                  apiKey: 'AIzaSyDw5sFwN-NTYcw4C09-seRd1o-W2Jm9ER0',
                   initialPosition: kInitialPosition,
                   useCurrentLocation: true,
                   selectInitialPosition: true,
@@ -40,6 +40,7 @@ class _DeliveryState extends State<Delivery> {
                     _deliveryController.isCheckedPick == true
                         ? _deliveryController.pickselectedPlace = result
                         : _deliveryController.dropselectedPlace = result;
+                    print('ddsdsdsd=>$result');
                     Navigator.of(context).pop();
                     setState(() {});
                   },
@@ -52,6 +53,8 @@ class _DeliveryState extends State<Delivery> {
                     _deliveryController.isCheckedPick == true
                         ? _deliveryController.pickselectedPlace = selectedPlace
                         : _deliveryController.dropselectedPlace = selectedPlace;
+                    print('ddsdsdsd hhh=>${selectedPlace!.name}');
+
                     return isSearchBarFocused
                         ? Container()
                         : FloatingCard(
