@@ -9,6 +9,7 @@ import 'package:truckdelivery/controller/setting_controller.dart';
 import 'package:truckdelivery/helper/snackbar_helper.dart';
 import 'package:truckdelivery/model/snackbar_message.dart';
 import 'package:truckdelivery/pages/chat.dart';
+import 'package:truckdelivery/pages/map.dart';
 
 class OrderRequest extends StatefulWidget {
   @override
@@ -179,20 +180,20 @@ class _OrderRequestState extends State<OrderRequest> {
                                                               fontWeight: FontWeight.w600,
                                                             ),
                                                           ),
-                                                          RatingBar.builder(
-                                                            itemSize: 12,
-                                                            initialRating: 3,
-                                                            minRating: 1,
-                                                            direction: Axis.horizontal,
-                                                            unratedColor: Colors.grey[300],
-                                                            allowHalfRating: true,
-                                                            itemCount: 5,
-                                                            itemBuilder: (context, _) => const Icon(
-                                                              Icons.star,
-                                                              color: Colors.amber,
-                                                            ),
-                                                            onRatingUpdate: (rating) {},
-                                                          ),
+                                                          // RatingBar.builder(
+                                                          //   itemSize: 12,
+                                                          //   initialRating: 3,
+                                                          //   minRating: 1,
+                                                          //   direction: Axis.horizontal,
+                                                          //   unratedColor: Colors.grey[300],
+                                                          //   allowHalfRating: true,
+                                                          //   itemCount: 5,
+                                                          //   itemBuilder: (context, _) => const Icon(
+                                                          //     Icons.star,
+                                                          //     color: Colors.amber,
+                                                          //   ),
+                                                          //   onRatingUpdate: (rating) {},
+                                                          // ),
                                                         ],
                                                       ),
                                                     ],
@@ -326,6 +327,7 @@ class _TimerClassState extends State<TimerClass> {
     startTimeout();
     super.initState();
     _settingController.getOrders(widget.parcelId);
+    print('ordrs initalaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   }
 
   @override
@@ -385,166 +387,372 @@ class _TimerClassState extends State<TimerClass> {
                                 shrinkWrap: true,
                                 itemCount: value.order.length,
                                 itemBuilder: (context, index) {
-                                  return Card(
-                                    elevation: 3,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.only(left: 10, right: 20),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        value.updateOrderRequest(value.order[index].id);
-                                                        // final snackbar = SnackbarHelper.instance..injectContext(context);
-                                                        // snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'طلب القبول'));
-                                                        // return;
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (ctx) => Chatapp(
-                                                                      index: index,
-                                                                    )));
-                                                      },
-                                                      child: Container(
+                                  double dropLocationDistanse = value.calculateDistance(
+                                      value.order[index].lat.toDouble(),
+                                      value.order[index].long.toDouble(),
+                                      value.order[index].dropLocationLat.toDouble(),
+                                      value.order[index].dropLocationLong.toDouble());
+                                  double pickLocationDistance = value.calculateDistance(
+                                      value.order[index].lat.toDouble(),
+                                      value.order[index].long.toDouble(),
+                                      value.order[index].pickLocationLat.toDouble(),
+                                      value.order[index].pickLocationLong.toDouble());
+
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (ctx) => MapLocationScreen(
+                                                    index: index,
+                                                  )));
+                                    },
+                                    child: Card(
+                                      elevation: 3,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(vertical: 10),
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.only(left: 10, right: 20),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          value.updateOrderRequest(value.order[index].id);
+                                                          // final snackbar = SnackbarHelper.instance..injectContext(context);
+                                                          // snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'طلب القبول'));
+                                                          // return;
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (ctx) => Chatapp(
+                                                                        index: index,
+                                                                      )));
+                                                        },
+                                                        child: Container(
+                                                          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                                                          decoration: BoxDecoration(
+                                                            color: lightblueColor,
+                                                            borderRadius: BorderRadius.circular(5),
+                                                            border: Border.all(
+                                                              color: blueColor,
+                                                            ),
+                                                          ),
+                                                          child: const Center(
+                                                            child: Text(
+                                                              'قبول',
+                                                              style: TextStyle(
+                                                                fontSize: 11,
+                                                                color: Colors.white,
+                                                                fontWeight: FontWeight.w600,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Container(
                                                         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
                                                         decoration: BoxDecoration(
-                                                          color: lightblueColor,
                                                           borderRadius: BorderRadius.circular(5),
                                                           border: Border.all(
-                                                            color: blueColor,
+                                                            color: Colors.grey,
                                                           ),
                                                         ),
                                                         child: const Center(
                                                           child: Text(
-                                                            'قبول',
+                                                            'رفض',
                                                             style: TextStyle(
                                                               fontSize: 11,
-                                                              color: Colors.white,
+                                                              color: Colors.grey,
                                                               fontWeight: FontWeight.w600,
                                                             ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Container(
-                                                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(5),
-                                                        border: Border.all(
-                                                          color: Colors.grey,
-                                                        ),
-                                                      ),
-                                                      child: const Center(
-                                                        child: Text(
-                                                          'رفض',
-                                                          style: TextStyle(
-                                                            fontSize: 11,
-                                                            color: Colors.grey,
-                                                            fontWeight: FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                                      children: [
-                                                        Text(
-                                                          value.order[index].creatorId.firstName,
-                                                          style: const TextStyle(
-                                                            fontSize: 15,
-                                                            fontWeight: FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                          children: [
-                                                            const Text(
-                                                              '4.5',
-                                                              style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: Color(0xff878787),
-                                                                fontWeight: FontWeight.w600,
-                                                              ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        children: [
+                                                          Text(
+                                                            value.order[index].creatorId.firstName,
+                                                            style: const TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight: FontWeight.w600,
                                                             ),
-                                                            RatingBar.builder(
-                                                              itemSize: 12,
-                                                              initialRating: 3,
-                                                              minRating: 1,
-                                                              direction: Axis.horizontal,
-                                                              unratedColor: Colors.grey[300],
-                                                              allowHalfRating: true,
-                                                              itemCount: 5,
-                                                              itemBuilder: (context, _) => const Icon(
-                                                                Icons.star,
-                                                                color: Colors.amber,
-                                                              ),
-                                                              onRatingUpdate: (rating) {},
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Container(
-                                                      width: 45,
-                                                      height: 45,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.blue,
-                                                          shape: BoxShape.circle,
-                                                          image: value.order[index].creatorId.yourImage.isNotEmpty
-                                                              ? DecorationImage(
-                                                                  image: NetworkImage(value.order[index].creatorId.yourImage),
-                                                                  fit: BoxFit.cover)
-                                                              : null),
-                                                      alignment: Alignment.center,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                                          ),
+                                                          SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          // Row(
+                                                          //   mainAxisAlignment: MainAxisAlignment.end,
+                                                          //   children: [
+                                                          //     Text(
+                                                          //       '${(value.order[index].creatorId.reviews) / (value.order[index].creatorId.reviews)}',
+                                                          //       style: TextStyle(
+                                                          //         fontSize: 12,
+                                                          //         color: Color(0xff878787),
+                                                          //         fontWeight: FontWeight.w600,
+                                                          //       ),
+                                                          //     ),
+                                                          //     RatingBar.builder(
+                                                          //       itemSize: 12,
+                                                          //       initialRating: (value.order[index].creatorId.reviews)/(value.order[index].creatorId.totalCount),
+                                                          //       minRating: 1,
+                                                          //       direction: Axis.horizontal,
+                                                          //       unratedColor: Colors.grey[300],
+                                                          //       allowHalfRating: true,
+                                                          //       itemCount: 5,
+                                                          //       itemBuilder: (context, _) => const Icon(
+                                                          //         Icons.star,
+                                                          //         color: Colors.amber,
+                                                          //       ),
+                                                          //       onRatingUpdate: (rating) {},
+                                                          //     ),
+                                                          //   ],
+                                                          // ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Container(
+                                                        width: 45,
+                                                        height: 45,
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.blue,
+                                                            shape: BoxShape.circle,
+                                                            image: value.order[index].creatorId.yourImage.isNotEmpty
+                                                                ? DecorationImage(
+                                                                    image: NetworkImage(value.order[index].creatorId.yourImage),
+                                                                    fit: BoxFit.cover)
+                                                                : null),
+                                                        alignment: Alignment.center,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-                                              margin: EdgeInsets.only(right: 20),
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5),
-                                                border: Border.all(
+                                            Row(children: [
+                                              Column(children: [
+                                                Image.asset(
+                                                  'assets/location.png',
+                                                  height: 35,
                                                   color: blueColor,
                                                 ),
-                                              ),
-                                              child: Center(
-                                                child: Text(' قيمة العرض : ريال '+'${value.order[index].prize}',
+                                                const Text(
+                                                  'تسليم',
                                                   style: TextStyle(
-                                                    fontSize: 11,
+                                                    fontSize: 10,
                                                     color: blueColor,
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                                 ),
+                                              ]),
+                                              const Icon(
+                                                Icons.circle,
+                                                size: 10,
+                                                color: blueColor,
                                               ),
-                                            ),
-                                          ])
-                                        ],
+                                              const SizedBox(
+                                                width: 2,
+                                              ),
+                                              const Icon(
+                                                Icons.circle,
+                                                size: 10,
+                                                color: blueColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 2,
+                                              ),
+                                              const Icon(
+                                                Icons.circle,
+                                                size: 10,
+                                                color: blueColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 1,
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  border: Border.all(
+                                                    color: blueColor,
+                                                  ),
+                                                ),
+                                                child: Center(
+                                                  child: Row(
+                                                    children: [
+                                                      const Text(
+                                                        'كم',
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: blueColor,
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        pickLocationDistance.toStringAsFixed(1),
+                                                        style: const TextStyle(
+                                                          fontSize: 11,
+                                                          color: blueColor,
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              const Icon(
+                                                Icons.circle,
+                                                size: 10,
+                                                color: blueColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 2,
+                                              ),
+                                              const Icon(
+                                                Icons.circle,
+                                                size: 10,
+                                                color: blueColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 2,
+                                              ),
+                                              const Icon(
+                                                Icons.circle,
+                                                size: 10,
+                                                color: blueColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 1,
+                                              ),
+                                              Column(children: [
+                                                Image.asset(
+                                                  'assets/box.png',
+                                                  height: 35,
+                                                  color: blueColor,
+                                                ),
+                                                const Text(
+                                                  'استلام',
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: blueColor,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ]),
+                                              const Icon(
+                                                Icons.circle,
+                                                size: 10,
+                                                color: blueColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 2,
+                                              ),
+                                              const Icon(
+                                                Icons.circle,
+                                                size: 10,
+                                                color: blueColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 2,
+                                              ),
+                                              const Icon(
+                                                Icons.circle,
+                                                size: 10,
+                                                color: blueColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 1,
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  border: Border.all(
+                                                    color: blueColor,
+                                                  ),
+                                                ),
+                                                child: Center(
+                                                  child: Row(
+                                                    children: [
+                                                      const Text(
+                                                        'كم',
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: blueColor,
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        dropLocationDistanse.toStringAsFixed(1),
+                                                        style: const TextStyle(
+                                                          fontSize: 11,
+                                                          color: blueColor,
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Column(children: [
+                                                Image.asset(
+                                                  'assets/person1.png',
+                                                  height: 20,
+                                                  color: blueColor,
+                                                ),
+                                                const SizedBox(
+                                                  height: 6,
+                                                ),
+                                                const Text(
+                                                  'أنت',
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: blueColor,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ])
+                                            ]),
+                                            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                                                margin: EdgeInsets.only(right: 20),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  border: Border.all(
+                                                    color: blueColor,
+                                                  ),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    ' قيمة العرض : ريال ' + '${value.order[index].prize}',
+                                                    style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: blueColor,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ])
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );

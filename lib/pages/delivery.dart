@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:truckdelivery/controller/delivery_controller.dart';
+import 'package:truckdelivery/helper/get_storage_helper.dart';
 import 'package:truckdelivery/pages/detail.dart';
 import 'package:truckdelivery/pages/paymethod.dart';
 
@@ -18,6 +19,7 @@ class Delivery extends StatefulWidget {
 
 class _DeliveryState extends State<Delivery> {
   DeliveryController deliveryController = Get.put(DeliveryController());
+  GetStorageHelper getStorageHelper = GetStorageHelper.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +42,30 @@ class _DeliveryState extends State<Delivery> {
                     _deliveryController.isCheckedPick == true
                         ? _deliveryController.pickselectedPlace = result
                         : _deliveryController.dropselectedPlace = result;
-                    print('ddsdsdsd=>$result');
-                    Navigator.of(context).pop();
-                    setState(() {});
+                    // Navigator.of(context).pop();
+                    // setState(() {});
                   },
                   forceSearchOnZoomChanged: true,
                   automaticallyImplyAppBarLeading: false,
                   // autocompleteLanguage: "ko",
                   // region: 'au',
                   selectedPlaceWidgetBuilder: (_, selectedPlace, state, isSearchBarFocused) {
-                    print("state: $state, isSearchBarFocused: $isSearchBarFocused");
-                    _deliveryController.isCheckedPick == true
-                        ? _deliveryController.pickselectedPlace = selectedPlace
-                        : _deliveryController.dropselectedPlace = selectedPlace;
-                    print('ddsdsdsd hhh=>${selectedPlace!.name}');
-
+                    print("state: $state, isSearchBarFocused: $selectedPlace");
+                    if (_deliveryController.isCheckedPick == true) {
+                      _deliveryController.pickselectedPlace = selectedPlace;
+                      UserPicUp userPickUp = UserPicUp(
+                          pickLocationLat: selectedPlace?.geometry?.location.lat??0,
+                          pickLocationLong: selectedPlace?.geometry?.location.lng??0,
+                      pickAddress: selectedPlace?.formattedAddress.toString()??'',
+                      );
+                      getStorageHelper.storePickUp(userPickUp);
+                    } else {
+                      _deliveryController.dropselectedPlace = selectedPlace;
+                      // UserDrop userDrop = UserDrop(
+                      //     dropLocationLat: selectedPlace!.geometry!.location.lat,
+                      //     dropLocationLong: selectedPlace.geometry!.location.lng);
+                      // getStorageHelper.storeDrop(userDrop);
+                    }
                     return isSearchBarFocused
                         ? Container()
                         : FloatingCard(
@@ -120,7 +131,6 @@ class _DeliveryState extends State<Delivery> {
                                       GestureDetector(
                                         onTap: () {
                                           if (_deliveryController.isCheckedPick == true) {
-                                            print('pick And Drop klklk');
                                             _deliveryController.isCheckedPick = false;
                                             setState(() {});
                                           } else {

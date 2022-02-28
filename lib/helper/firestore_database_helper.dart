@@ -43,6 +43,7 @@ class FirestoreDatabaseHelper {
     final documentReferences = await Future.wait([
       _firebaseFirestore.collection(_ORDER).
       where('user_id', isEqualTo: userId).
+      where('status', isEqualTo: true).
       get(const GetOptions(source: Source.server)).timeout(_timeoutDuration),
     ]);
 
@@ -64,13 +65,15 @@ class FirestoreDatabaseHelper {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getOrders(String userId,String orderId) {
+    print('get my orderssssssssssssss');
     return _firebaseFirestore
         .collection(_ORDER)
         .where('user_id', isEqualTo: userId)
-        .where('status', isEqualTo: false)
         .where('order_id',isEqualTo: orderId)
         .snapshots();
   }
+  Future<void> updateOrderStatus(String orderId,String orderValue) =>
+      _firebaseFirestore.collection(_ORDER).doc(orderId).update({'order_status': orderValue}).timeout(_timeoutDuration);
   Stream<QuerySnapshot<Map<String, dynamic>>> myMessage(String chatId) => _firebaseFirestore
       .collection(_CHAT)
       .where('chat_id', isEqualTo: chatId)

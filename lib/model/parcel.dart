@@ -23,6 +23,7 @@ class Parcel {
       required this.dropLocationLat,
       required this.dropLocationLong,
       required this.dropAddress,
+        required this.pickAddress,
       required this.mobileNumber,
       required this.coupon,
       required this.id,
@@ -30,7 +31,7 @@ class Parcel {
       required this.status,
       required this.paymentMethod,
       required this.isParseOutCity,
-      required this.pickAddress});
+    });
 
   Parcel.initial(
       {required creatorId,

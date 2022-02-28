@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -51,7 +52,7 @@ class SettingController extends GetxController {
   // Future getOrderRequest() async {
   //   final user = await getStorageHelper.user();
   //   if (user == null) return null;
-  //   order = await _firestoreDatabaseHelper.getOrderRequest(user.id);
+   // order = await _firestoreDatabaseHelper.getOrderRequest(user.id);
   //   update();
   //   notifyChildrens();
   // }
@@ -77,8 +78,10 @@ class SettingController extends GetxController {
         }
       }
       final orderValue=orders.values.toList();
-      order.clear();
+      // order.clear();
       order.isEmpty ? order.addAll(orderValue) : order.insertAll(0, orderValue);
+      print('parcels');
+      print(order);
       update();
       notifyChildrens();
       print('parcels');
@@ -89,7 +92,9 @@ class SettingController extends GetxController {
       print("onError");
     });
   }
-
+  void orderStatusUpdate(String orderId, orderValue) {
+    _firestoreDatabaseHelper.updateOrderStatus(orderId, orderValue);
+  }
 
   Future<void> updateOrderRequest(String id) async {
     _firestoreDatabaseHelper.updateOrder(id);
@@ -98,5 +103,10 @@ class SettingController extends GetxController {
   Future<void> updateReviews(String id,num reviews,num totalCount) async {
     _firestoreDatabaseHelper.updateOrder(id);
   }
-
+  double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 - c((lat2 - lat1) * p) / 2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
+  }
 }

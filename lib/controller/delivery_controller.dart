@@ -36,7 +36,7 @@ class DeliveryController extends GetxController {
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleAPiKey = 'AIzaSyDeX7maRqimkPJPhvxKEy-uTNyV0IhVzlQ';
+  String googleAPiKey = 'AIzaSyDw5sFwN-NTYcw4C09-seRd1o-W2Jm9ER0';
 
   void addMarker() {
     final pickLocation = pickselectedPlace!.geometry!.location;
@@ -52,7 +52,7 @@ class DeliveryController extends GetxController {
     /// destination marker
     _addMarker(LatLng(_destLatitude, _destLongitude), "destination", BitmapDescriptor.defaultMarkerWithHue(90));
     _getPolyline();
-    print('ad marlker=======================>');
+    print('ad marker=======================>');
   }
 
   void onMapCreated(GoogleMapController controller) async {
@@ -105,13 +105,13 @@ class DeliveryController extends GetxController {
     super.onInit();
   }
 
-  Future<Parcel?> addParcel(int isOutCity) async {
+  Future<Parcel?> addParcel(int isOutCity,num pickLat,num pickLong,String picAddress) async {
     final user = await currentUser;
     if (user == null) return null;
     final parcel = Parcel.initial(
         creatorId: user.id,
-        pickLocationLat: pickselectedPlace!.geometry!.location.lat,
-        pickLocationLong: pickselectedPlace!.geometry!.location.lng,
+        pickLocationLat: pickLat,
+        pickLocationLong:pickLong,
         dropLocationLat: dropselectedPlace!.geometry!.location.lat,
         dropLocationLong: dropselectedPlace!.geometry!.location.lng,
         dropAddress: dropselectedPlace!.formattedAddress.toString(),
@@ -120,12 +120,15 @@ class DeliveryController extends GetxController {
         mobileNumebr: mobileNumber.text,
         paymentMethod: 'paymentMethod',
         isParseOutCity: isOutCity == 0 ? true : false,
-        pickAddress: pickselectedPlace!.formattedAddress.toString());
+        pickAddress: picAddress);
     try {
       final parcelBet = await _firestoreDatabaseHelper.addParcel(parcel);
       mobileNumber.clear();
+      _getStorageHelper.removedPickUp();
       return parcelBet;
-    } catch (_) {
+    } catch (e,s) {
+      print(e);
+      print(s);
       return null;
     }
   }

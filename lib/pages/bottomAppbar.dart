@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truckdelivery/constant.dart';
-import 'package:truckdelivery/pages/ads.dart';
 import 'package:truckdelivery/pages/homePage.dart';
 import 'package:truckdelivery/pages/invitation.dart';
 import 'package:truckdelivery/pages/messaging.dart';
 import 'package:truckdelivery/pages/orderRequest.dart';
-import 'package:truckdelivery/pages/orders.dart';
 import 'package:truckdelivery/pages/settings.dart';
 
 class BottomApp extends StatefulWidget {
@@ -19,7 +17,7 @@ class BottomApp extends StatefulWidget {
 class _BottomAppState extends State<BottomApp> {
   int index = 2;
   final List<Widget> screens = [
-    AdsPage(),
+    OrderRequest(),
     MessagingPage(),
     HomePage(),
     InvitationPage(),
@@ -41,7 +39,7 @@ class _BottomAppState extends State<BottomApp> {
               InkWell(
                 onTap: () {
                   setState(() {
-                    curentScreen = AdsPage();
+                    curentScreen = OrderRequest();
                     index = 0;
                   });
                 },

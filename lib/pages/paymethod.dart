@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:truckdelivery/controller/delivery_controller.dart';
+import 'package:truckdelivery/helper/get_storage_helper.dart';
 import 'package:truckdelivery/helper/material_dialog_content.dart';
 import 'package:truckdelivery/helper/material_dialog_helper.dart';
 import 'package:truckdelivery/helper/snackbar_helper.dart';
@@ -18,15 +19,32 @@ class PaymentMethod extends StatefulWidget {
   _PaymentMethodState createState() => _PaymentMethodState();
 }
 
+
+
 class _PaymentMethodState extends State<PaymentMethod> {
   DeliveryController deliveryController = Get.find();
   final MaterialDialogHelper _dialogHelper = MaterialDialogHelper.instance();
+  GetStorageHelper getStorageHelper=GetStorageHelper.instance;
+  UserPicUp? userPicUp;
+  UserDrop? userDrop;
 
+  @override
+  void initState() {
+    getPickUp();
+    super.initState();
+  }
+
+  getPickUp()async{
+     userPicUp= await getStorageHelper.getPickUp();
+     userDrop= await getStorageHelper.getDrop();
+  }
   void _addParcel() async {
     _dialogHelper
       ..injectContext(context)
       ..showProgressDialog('إضافة طلب ...!');
-    final message = await deliveryController.addParcel(widget.isOutCity);
+
+    final message = await deliveryController.addParcel(
+        widget.isOutCity,userPicUp?.pickLocationLat??0,userPicUp?.pickLocationLong??0,userPicUp?.pickAddress??'');
     _dialogHelper.dismissProgress();
     if (message == null) {
       _dialogHelper.showMaterialDialogWithContent(MaterialDialogContent.networkError(), () => _addParcel());
@@ -39,9 +57,14 @@ class _PaymentMethodState extends State<PaymentMethod> {
     // }
     // snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تمت إضافة الطلب بنجاح..!'));
     //Navigator.push(context, MaterialPageRoute(builder: (ctx) => BottomApp()));
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) => TimerClass(parcelId: message.id,)));
+    // Navigator.pop(context);
+    // Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (ctx) => TimerClass(
+                  parcelId: message.id,
+                )));
 
     // Future.delayed(const Duration(milliseconds: 700))
     //     .then((_) => Navigator.pushNamedAndRemoveUntil(context, MainScreen.route, (route) => false));
@@ -51,7 +74,8 @@ class _PaymentMethodState extends State<PaymentMethod> {
     _dialogHelper
       ..injectContext(context)
       ..showProgressDialog('إضافة طلب ...!');
-    final message = await deliveryController.addFurniture(widget.isOutCity,_dropDownValuePick!,_dropDownValueDrop!,widget.carTitle,counter);
+    final message = await deliveryController.addFurniture(
+        widget.isOutCity, _dropDownValuePick!, _dropDownValueDrop!, widget.carTitle, counter);
     _dialogHelper.dismissProgress();
     if (message == null) {
       _dialogHelper.showMaterialDialogWithContent(MaterialDialogContent.networkError(), () => _addParcel());
@@ -63,10 +87,14 @@ class _PaymentMethodState extends State<PaymentMethod> {
     //   return;
     // }
     // snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تمت إضافة الطلب بنجاح..!'));
-     int count=0;
-    Navigator.popUntil(context,(_)=>count++==4);
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) => TimerClass(parcelId: message.id,)));
-
+    // int count = 0;
+    // Navigator.popUntil(context, (_) => count++ == 4);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (ctx) => TimerClass(
+                  parcelId: message.id,
+                )));
   }
 
   List<String> _items = [
@@ -180,7 +208,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              '${deliveryController.pickselectedPlace!.formattedAddress}',
+                                              '${userPicUp?.pickAddress??0}',
                                               textAlign: TextAlign.center,
                                               maxLines: 2,
                                               style: TextStyle(
@@ -374,8 +402,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                     bottomRight: Radius.circular(20),
                                   )),
                               child: Center(
-                                child: Text(widget.isOutCity == 0 || widget.isOutCity == 1?
-                                'تأكيد الطلب':'وصف الأغراض',
+                                child: Text(widget.isOutCity == 0 || widget.isOutCity == 1 ? 'تأكيد الطلب' : 'وصف الأغراض',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,
@@ -615,18 +642,15 @@ class _PaymentMethodState extends State<PaymentMethod> {
                         if (deliveryController.description.text.isEmpty) {
                           Navigator.pop(context);
                           snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: 'الرجاء كتابة وصف الاغراض'));
-                        }
-                        else if (_dropDownValuePick == null) {
+                        } else if (_dropDownValuePick == null) {
                           Navigator.pop(context);
                           snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: 'وصف لموقع الاستلام'));
-                        }
-                        else if (_dropDownValueDrop == null) {
+                        } else if (_dropDownValueDrop == null) {
                           Navigator.pop(context);
                           snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: 'وصف لموقع الواجهه'));
-                        }
-                        else{
-                         Navigator.pop(context);
-                         _addFurniture();
+                        } else {
+                          Navigator.pop(context);
+                          _addFurniture();
                         }
                       },
                       child: Container(
