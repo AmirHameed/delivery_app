@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -35,7 +33,7 @@ class DeliveryController extends GetxController {
   Map<MarkerId, Marker> markers = {};
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
-  PolylinePoints polylinePoints = PolylinePoints();
+  //PolylinePoints polylinePoints = PolylinePoints();
   String googleAPiKey = 'AIzaSyDw5sFwN-NTYcw4C09-seRd1o-W2Jm9ER0';
 
   void addMarker() {
@@ -51,7 +49,7 @@ class DeliveryController extends GetxController {
 
     /// destination marker
     _addMarker(LatLng(_destLatitude, _destLongitude), "destination", BitmapDescriptor.defaultMarkerWithHue(90));
-    _getPolyline();
+    //_getPolyline();
     print('ad marker=======================>');
   }
 
@@ -72,19 +70,19 @@ class DeliveryController extends GetxController {
     update();
   }
 
-  _getPolyline() async {
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleAPiKey, PointLatLng(_originLatitude, _originLongitude), PointLatLng(_destLatitude, _destLongitude),
-        travelMode: TravelMode.driving, wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]);
-
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-      print(polylineCoordinates);
-    }
-    _addPolyLine();
-  }
+  // _getPolyline() async {
+  //   //PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+  //       googleAPiKey, PointLatLng(_originLatitude, _originLongitude), PointLatLng(_destLatitude, _destLongitude),
+  //       travelMode: TravelMode.driving, wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]);
+  //
+  //   if (result.points.isNotEmpty) {
+  //     result.points.forEach((PointLatLng point) {
+  //       polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+  //     });
+  //     print(polylineCoordinates);
+  //   }
+  //   _addPolyLine();
+  // }
 
   getlocation() async {
     position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);

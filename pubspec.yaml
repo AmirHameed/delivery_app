@@ -33,18 +33,16 @@ dependencies:
   cloud_firestore: ^3.1.5
   shared_preferences:
   image_picker:
-  #geolocator:
   google_maps_place_picker: any
-  flutter_polyline_points: any
+  #flutter_polyline_points: any
   get_storage: 2.0.3
   firebase_storage: ^10.2.4
   connectivity: ^3.0.6
   google_sign_in:
   share: ^2.0.4
-  geolocator: any
-  geocoder: any
   loading_indicator: ^3.0.2
   google_maps_flutter: any
+  geolocator: any
   cached_network_image: ^3.2.0
   sign_in_with_apple: ^3.3.0
   uuid: ^3.0.5

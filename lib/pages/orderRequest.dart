@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:truckdelivery/constant.dart';
 import 'package:truckdelivery/controller/setting_controller.dart';
 import 'package:truckdelivery/helper/snackbar_helper.dart';
-import 'package:truckdelivery/model/snackbar_message.dart';
 import 'package:truckdelivery/pages/chat.dart';
 import 'package:truckdelivery/pages/map.dart';
 
@@ -83,7 +82,7 @@ class _OrderRequestState extends State<OrderRequest> {
                           ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: value.order.length,
+                              itemCount: value.allOrder.length,
                               itemBuilder: (context, index) {
                                 return Card(
                                   elevation: 3,
@@ -100,32 +99,22 @@ class _OrderRequestState extends State<OrderRequest> {
                                             children: [
                                               Column(
                                                 children: [
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      value.updateOrderRequest(value.order[index].id);
-
-                                                      final snackbar = SnackbarHelper.instance..injectContext(context);
-                                                      snackbar.showSnackbar(
-                                                          snackbar: SnackbarMessage.success(message: 'طلب القبول'));
-                                                      return;
-                                                    },
-                                                    child: Container(
-                                                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-                                                      decoration: BoxDecoration(
-                                                        color: lightblueColor,
-                                                        borderRadius: BorderRadius.circular(5),
-                                                        border: Border.all(
-                                                          color: blueColor,
-                                                        ),
+                                                  Container(
+                                                    padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                                                    decoration: BoxDecoration(
+                                                      color: lightblueColor,
+                                                      borderRadius: BorderRadius.circular(5),
+                                                      border: Border.all(
+                                                        color: blueColor,
                                                       ),
-                                                      child: const Center(
-                                                        child: Text(
-                                                          'قبول',
-                                                          style: TextStyle(
-                                                            fontSize: 11,
-                                                            color: Colors.white,
-                                                            fontWeight: FontWeight.w600,
-                                                          ),
+                                                    ),
+                                                    child: const Center(
+                                                      child: Text(
+                                                        'قبول',
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.w600,
                                                         ),
                                                       ),
                                                     ),
@@ -160,7 +149,7 @@ class _OrderRequestState extends State<OrderRequest> {
                                                     crossAxisAlignment: CrossAxisAlignment.end,
                                                     children: [
                                                       Text(
-                                                        value.order[index].creatorId.firstName,
+                                                        value.allOrder[index].creatorId.firstName,
                                                         style: const TextStyle(
                                                           fontSize: 15,
                                                           fontWeight: FontWeight.w600,
@@ -172,28 +161,27 @@ class _OrderRequestState extends State<OrderRequest> {
                                                       Row(
                                                         mainAxisAlignment: MainAxisAlignment.end,
                                                         children: [
-                                                          const Text(
-                                                            '4.5',
-                                                            style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: Color(0xff878787),
-                                                              fontWeight: FontWeight.w600,
-                                                            ),
+                                                          Text(
+                                                            '${(value.order[index].creatorId.reviews / value.order[index].creatorId.totalCount).isNaN ? 0 : (value.order[index].creatorId.reviews / value.order[index].creatorId.totalCount).toPrecision(2)}',
+                                                            style: TextStyle(color: Colors.grey[400], fontSize: 12),
                                                           ),
-                                                          // RatingBar.builder(
-                                                          //   itemSize: 12,
-                                                          //   initialRating: 3,
-                                                          //   minRating: 1,
-                                                          //   direction: Axis.horizontal,
-                                                          //   unratedColor: Colors.grey[300],
-                                                          //   allowHalfRating: true,
-                                                          //   itemCount: 5,
-                                                          //   itemBuilder: (context, _) => const Icon(
-                                                          //     Icons.star,
-                                                          //     color: Colors.amber,
-                                                          //   ),
-                                                          //   onRatingUpdate: (rating) {},
-                                                          // ),
+                                                          RatingBarIndicator(
+                                                            rating: (value.order[index].creatorId.reviews /
+                                                                        value.order[index].creatorId.totalCount)
+                                                                    .isNaN
+                                                                ? 0
+                                                                : (value.order[index].creatorId.reviews /
+                                                                        value.order[index].creatorId.totalCount)
+                                                                    .toPrecision(2),
+                                                            itemBuilder: (context, index) => Icon(
+                                                              Icons.star,
+                                                              color: Colors.amber,
+                                                            ),
+                                                            itemCount: 5,
+                                                            itemSize: 15,
+                                                            unratedColor: Colors.black12,
+                                                            direction: Axis.horizontal,
+                                                          ),
                                                         ],
                                                       ),
                                                     ],
@@ -207,9 +195,9 @@ class _OrderRequestState extends State<OrderRequest> {
                                                     decoration: BoxDecoration(
                                                         color: Colors.blue,
                                                         shape: BoxShape.circle,
-                                                        image: value.order[index].creatorId.yourImage.isNotEmpty
+                                                        image: value.allOrder[index].creatorId.yourImage.isNotEmpty
                                                             ? DecorationImage(
-                                                                image: NetworkImage(value.order[index].creatorId.yourImage),
+                                                                image: NetworkImage(value.allOrder[index].creatorId.yourImage),
                                                                 fit: BoxFit.cover)
                                                             : null),
                                                     alignment: Alignment.center,
@@ -231,7 +219,7 @@ class _OrderRequestState extends State<OrderRequest> {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                value.order[index].prize,
+                                                value.allOrder[index].prize,
                                                 style: TextStyle(
                                                   fontSize: 11,
                                                   color: blueColor,
@@ -495,33 +483,6 @@ class _TimerClassState extends State<TimerClass> {
                                                           SizedBox(
                                                             width: 5,
                                                           ),
-                                                          // Row(
-                                                          //   mainAxisAlignment: MainAxisAlignment.end,
-                                                          //   children: [
-                                                          //     Text(
-                                                          //       '${(value.order[index].creatorId.reviews) / (value.order[index].creatorId.reviews)}',
-                                                          //       style: TextStyle(
-                                                          //         fontSize: 12,
-                                                          //         color: Color(0xff878787),
-                                                          //         fontWeight: FontWeight.w600,
-                                                          //       ),
-                                                          //     ),
-                                                          //     RatingBar.builder(
-                                                          //       itemSize: 12,
-                                                          //       initialRating: (value.order[index].creatorId.reviews)/(value.order[index].creatorId.totalCount),
-                                                          //       minRating: 1,
-                                                          //       direction: Axis.horizontal,
-                                                          //       unratedColor: Colors.grey[300],
-                                                          //       allowHalfRating: true,
-                                                          //       itemCount: 5,
-                                                          //       itemBuilder: (context, _) => const Icon(
-                                                          //         Icons.star,
-                                                          //         color: Colors.amber,
-                                                          //       ),
-                                                          //       onRatingUpdate: (rating) {},
-                                                          //     ),
-                                                          //   ],
-                                                          // ),
                                                         ],
                                                       ),
                                                       const SizedBox(

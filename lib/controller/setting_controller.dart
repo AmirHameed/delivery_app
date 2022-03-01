@@ -19,6 +19,8 @@ class SettingController extends GetxController {
   UserModel? userModel;
   Stream<QuerySnapshot<Map<String, dynamic>>>? _stream;
   List<Order> order=[];
+  List<Order> allOrder=[];
+
   Future<void> logout() async {
     _firebaseAuthHelper.signout();
     getStorageHelper.clear();
@@ -49,13 +51,13 @@ class SettingController extends GetxController {
     update();
   }
 
-  // Future getOrderRequest() async {
-  //   final user = await getStorageHelper.user();
-  //   if (user == null) return null;
-   // order = await _firestoreDatabaseHelper.getOrderRequest(user.id);
-  //   update();
-  //   notifyChildrens();
-  // }
+  Future getOrderRequest() async {
+    final user = await getStorageHelper.user();
+    if (user == null) return null;
+    allOrder = await _firestoreDatabaseHelper.getOrderRequest(user.id);
+    update();
+    notifyChildrens();
+  }
 
   Future getOrders(String orderId) async {
     final user = await getStorageHelper.user();
@@ -95,13 +97,17 @@ class SettingController extends GetxController {
   void orderStatusUpdate(String orderId, orderValue) {
     _firestoreDatabaseHelper.updateOrderStatus(orderId, orderValue);
   }
+  void orderStatusCancel(String orderId) {
+    _firestoreDatabaseHelper.updateOrderCancel(orderId);
+  }
+
 
   Future<void> updateOrderRequest(String id) async {
     _firestoreDatabaseHelper.updateOrder(id);
   }
 
   Future<void> updateReviews(String id,num reviews,num totalCount) async {
-    _firestoreDatabaseHelper.updateOrder(id);
+    _firestoreDatabaseHelper.updateReviews(id,reviews,totalCount);
   }
   double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
     var p = 0.017453292519943295;

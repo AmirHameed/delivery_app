@@ -8,6 +8,7 @@ class Order {
   final UserModel userId;
   final String prize;
   final bool completed;
+  final bool cancel;
   final num lat;
   final num long;
   final num pickLocationLat;
@@ -25,6 +26,7 @@ class Order {
       required this.prize,
       required this.lat,
       required this.long,
+      required this.cancel,
       required this.completed,
       required this.pickLocationLat,
       required this.pickLocationLong,
@@ -52,6 +54,7 @@ class Order {
           lat: lat,
           long: long,
           completed: false,
+          cancel: false,
           pickLocationLat: pickLocationLat,
           pickLocationLong: pickLocationLong,
           dropLocationLat: dropLocationLat,
@@ -63,11 +66,12 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json, String id, UserModelRider creatorId) {
     final orderId = json['order_id'];
-    final userId =UserModel.fromJson({'id': json['user_id']});
+    final userId = UserModel.fromJson({'id': json['user_id']});
     final prize = json['prize'];
     final lat = json.containsKey('lat') ? json['lat'] : 0;
     final long = json.containsKey('long') ? json['long'] : 0;
     final completed = json.containsKey('completed') ? json['completed'] : false;
+    final cancel = json.containsKey('cancel') ? json['cancel'] : false;
     final pickLocationLat = json.containsKey('pick_location_lat') ? json['pick_location_lat'] : 0;
     final pickLocationLong = json.containsKey('pick_location_long') ? json['pick_location_long'] : 0;
     final dropLocationLat = json.containsKey('drop_location_lat') ? json['drop_location_lat'] : 0;
@@ -81,6 +85,7 @@ class Order {
       userId: userId,
       status: status,
       lat: lat,
+      cancel: cancel,
       long: long,
       completed: completed,
       pickLocationLat: pickLocationLat,
@@ -93,12 +98,13 @@ class Order {
     );
   }
 
-  Order copyWith({String? id, bool? status, bool? completed}) => Order(
+  Order copyWith({String? id, bool? status, bool? completed, bool? cancel}) => Order(
         creatorId: creatorId,
         orderId: orderId,
         userId: userId,
         prize: prize,
         lat: lat,
+        cancel: cancel ?? this.cancel,
         long: long,
         completed: completed ?? this.completed,
         pickLocationLat: pickLocationLat,
@@ -117,6 +123,7 @@ class Order {
         'prize': prize,
         'lat': lat,
         'long': long,
+        'cancel': cancel,
         'completed': completed,
         'pick_location_lat': pickLocationLat,
         'pick_location_long': pickLocationLong,

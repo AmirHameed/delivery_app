@@ -43,7 +43,7 @@ class FirestoreDatabaseHelper {
     final documentReferences = await Future.wait([
       _firebaseFirestore.collection(_ORDER).
       where('user_id', isEqualTo: userId).
-      where('status', isEqualTo: true).
+      where('completed', isEqualTo: true).
       get(const GetOptions(source: Source.server)).timeout(_timeoutDuration),
     ]);
 
@@ -96,6 +96,8 @@ class FirestoreDatabaseHelper {
     final documentReference = await _firebaseFirestore.collection(_PARCEL).add(parcel.toJson()).timeout(_timeoutDuration);
     return parcel.copyWith(id: documentReference.id);
   }
+  Future<void> updateOrderCancel(String orderId) =>
+      _firebaseFirestore.collection(_ORDER).doc(orderId).update({'cancel': true}).timeout(_timeoutDuration);
 
   Future<Furniture> addFurniture(Furniture furniture) async {
     final documentReference = await _firebaseFirestore.collection(_FURNITURE).add(furniture.toJson()).timeout(_timeoutDuration);
