@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:get/get.dart';
+import 'package:truckdelivery/common/empty_image_container.dart';
+import 'package:truckdelivery/common/placeholder_image.dart';
+import 'package:truckdelivery/constant.dart';
 import 'package:truckdelivery/controller/setting_controller.dart';
 import 'package:truckdelivery/pages/localDriver.dart';
 import 'package:truckdelivery/pages/profile.dart';
@@ -77,21 +81,37 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () {
                                     Navigator.push(context, MaterialPageRoute(builder: (ctx) => ProfilePage()));
                                   },
-                                  child: CircleAvatar(
-                                    radius: 23,
-                                    backgroundColor: Color(0xffAD122A),
-                                    child: Container(
+                                  child:
+                                  CachedNetworkImage(
+                                    imageUrl: value.userModel!.image,
+                                    imageBuilder: (context, imageProvider) => Container(
                                       width: 100,
                                       height: 40,
                                       decoration: BoxDecoration(
-                                          color: Colors.blue,
-                                          shape: BoxShape.circle,
-                                          image: value.userModel?.image != null
-                                              ? DecorationImage(image: NetworkImage(value.userModel!.image), fit: BoxFit.cover)
-                                              : null),
-                                      alignment: Alignment.center,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(color: blueColor, width: 1),
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
+                                    placeholder: (context, url) => const PlaceHolderImage(width: 50, height: 50),
+                                    errorWidget: (context, url, error) => const EmptyImageContainer(width: 50, height: 50),
                                   ),
+
+
+                                  // child: Container(
+                                  //   width: 100,
+                                  //   height: 40,
+                                  //   decoration: BoxDecoration(
+                                  //       shape: BoxShape.circle,
+                                  //       color: Colors.blue,
+                                  //       image: value.userModel?.image != null || value.userModel!.image.isNotEmpty
+                                  //           ? DecorationImage(image: NetworkImage(value.userModel!.image), fit: BoxFit.cover)
+                                  //           : DecorationImage(image: AssetImage('assets/empty_image.png'),fit: BoxFit.cover)),
+                                  //   alignment: Alignment.center,
+                                  // ),
                                 ),
                               ),
                               // Image.asset('assets/mic.png'),
@@ -257,32 +277,30 @@ class _HomePageState extends State<HomePage> {
 
   Widget myContainer(String text, image) {
     return Container(
+      height: 120,
       // padding: EdgeInsets.symmetric(vertical: 50),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
       ),
       child: Container(
-        padding: EdgeInsets.only(bottom: 80, top: 20),
+        padding: EdgeInsets.only(bottom: 10, top: 10,right: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           gradient: LinearGradient(
               begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xff28476E), Colors.white10]),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Text(
-                text,
-                maxLines: 1,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+        child: Align(
+          alignment: Alignment.topRight,
+          child: Text(
+            text,
+            maxLines: 2,
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
-          ],
+          ),
         ),
       ),
     );

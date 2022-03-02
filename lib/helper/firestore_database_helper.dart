@@ -26,6 +26,7 @@ class FirestoreDatabaseHelper {
   final _timeoutDuration = const Duration(seconds: 15);
 
   Future<UserModel?> addUser(UserModel user) async {
+    print('add user');
       await _firebaseFirestore.collection(_USER).doc(user.id).set(user.toJson()).timeout(_timeoutDuration);
       return user.copyWith(id: user.id);
     }

@@ -37,12 +37,17 @@ class AuthController extends GetxController {
           phone: phoneNumber.value.text,
           gender: isMale.value);
       final updatedUser = await _firestoreDatabaseHelper.addUser(userData);
+      print(updatedUser);
       if (updatedUser == null) return null;
       _getStorageHelper.storeUser(updatedUser);
       return '';
     } on FirebaseAuthException catch (e) {
+      print('exeptions');
+      print(e);
       return _firebaseAuthHelper.getErrorMessage(e);
-    } catch (e) {
+    } catch (e,s) {
+      print(e);
+      print(s);
       return null;
     }
   }

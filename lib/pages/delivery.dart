@@ -76,7 +76,7 @@ class _DeliveryState extends State<Delivery> {
                             width: 400,
                             borderRadius: BorderRadius.circular(12.0),
                             child: state == SearchingState.Searching
-                                ? Center(child: CircularProgressIndicator())
+                                ? Center(child: Text('أدخل الموقع في شريط البحث',style: TextStyle(fontSize: 18,color: Colors.red,fontWeight: FontWeight.bold),))
                                 : Container(
                                     child: Column(children: [
                                       Container(
@@ -198,7 +198,7 @@ class _DeliveryState extends State<Delivery> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 40),
+                padding: const EdgeInsets.only(top: 50),
                 child: Row(
                   children: [
                     InkWell(
@@ -206,9 +206,6 @@ class _DeliveryState extends State<Delivery> {
                           Navigator.pop(context);
                         },
                         child: Image.asset('assets/backButton.png')),
-                    SizedBox(
-                      width: 20,
-                    ),
                     Expanded(
                       child: Text(
                         widget.isOutCity == 0
@@ -220,9 +217,10 @@ class _DeliveryState extends State<Delivery> {
                                     : widget.isOutCity == 4
                                         ? 'نقل عفش'
                                         : widget.isOutCity == 5
-                                            ? ' سطحة ( خارج المدينة )'
+                                            ? 'سطحة ( خارج المدينة )'
                                             : 'سطحة ( داخل المدينة )',
                         maxLines: 1,
+                        textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.black, fontSize: 23, fontWeight: FontWeight.bold),
                       ),
                     ),

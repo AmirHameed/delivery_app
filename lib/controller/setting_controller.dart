@@ -31,6 +31,7 @@ class SettingController extends GetxController {
      final user=await getStorageHelper.user();
      if(user==null)return null;
      userModel=user;
+     getOrderRequest();
      update();
      notifyChildrens();
     super.onInit();
