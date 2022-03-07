@@ -75,7 +75,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
       ..injectContext(context)
       ..showProgressDialog('إضافة طلب ...!');
     final message = await deliveryController.addFurniture(
-        widget.isOutCity, _dropDownValuePick!, _dropDownValueDrop!, widget.carTitle, counter);
+        widget.isOutCity, _dropDownValuePick!, _dropDownValueDrop!, widget.carTitle, counter,userPicUp?.pickLocationLat??0,userPicUp?.pickLocationLong??0,userPicUp?.pickAddress??'');
     _dialogHelper.dismissProgress();
     if (message == null) {
       _dialogHelper.showMaterialDialogWithContent(MaterialDialogContent.networkError(), () => _addParcel());

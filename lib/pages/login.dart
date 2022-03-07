@@ -82,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
     Future.delayed(const Duration(milliseconds: 700))
         .then((_) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => BottomApp())));
   }
+
   @override
   Widget build(BuildContext context) {
     final snackbarHelper = SnackbarHelper.instance..injectContext(context);
@@ -129,20 +130,22 @@ class _LoginPageState extends State<LoginPage> {
                             Expanded(
                               child: TextFormField(
                                 controller: _.email.value,
-                                validator: (email){
-                                  if(email!.isEmpty)  {
+                                validator: (email) {
+                                  if (email!.isEmpty) {
                                     return 'الرجاء إدخال البريد الإلكتروني';
                                   }
-                                  if(!regExp.hasMatch(email)){
+                                  if (!regExp.hasMatch(email)) {
                                     return 'أدخل بريد إلكتروني صالح';
                                   }
                                 },
                                 decoration: InputDecoration(
-                                    hintText: 'xwz@gmail.com', border: InputBorder.none, contentPadding: EdgeInsets.only(left: 18)),
+                                    hintText: 'xwz@gmail.com',
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(left: 18)),
                               ),
                             ),
                             Text(
-                              'رقم الجوال',
+                              'بريد الالكتروني',
                               style: TextStyle(fontSize: 15),
                             ),
                             SizedBox(
@@ -150,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             Center(
                               child: Image(
-                                image: AssetImage('assets/NoPath - Copy (2).png'),
+                                image: AssetImage('assets/email.png'),
                               ),
                             ),
                           ],
@@ -177,8 +180,8 @@ class _LoginPageState extends State<LoginPage> {
                             Expanded(
                               child: TextFormField(
                                 controller: _.password.value,
-                                validator: (password){
-                                  if(password!.isEmpty)  {
+                                validator: (password) {
+                                  if (password!.isEmpty) {
                                     return 'الرجاء إدخال كلمة المرور';
                                   }
                                 },
@@ -259,7 +262,7 @@ class _LoginPageState extends State<LoginPage> {
                         Expanded(
                           child: InkWell(
                               onTap: () {
-                                if(_formKey.currentState!.validate()){
+                                if (_formKey.currentState!.validate()) {
                                   _login();
                                 }
                               },
@@ -285,7 +288,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 20,
                     ),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         if (Platform.isAndroid) {
                           snackbarHelper.showSnackbar(snackbar: SnackbarMessage.error(message: 'الرجاء الاتصال بجهاز IOS'));
                           return;

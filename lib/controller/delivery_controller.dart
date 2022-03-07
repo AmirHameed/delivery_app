@@ -22,6 +22,7 @@ class DeliveryController extends GetxController {
   TextEditingController orderDetail = TextEditingController();
   TextEditingController mobileNumber = TextEditingController();
   TextEditingController description = TextEditingController();
+  TextEditingController amount=TextEditingController();
 
   PickResult? pickselectedPlace;
   PickResult? dropselectedPlace;
@@ -119,9 +120,12 @@ class DeliveryController extends GetxController {
         paymentMethod: 'paymentMethod',
         isParseOutCity: isOutCity == 0 ? true : false,
         pickAddress: picAddress);
+    print('parcelsssssssssssssss');
+    print(parcel.toJson());
     try {
       final parcelBet = await _firestoreDatabaseHelper.addParcel(parcel);
       mobileNumber.clear();
+      orderDetail.clear();
       _getStorageHelper.removedPickUp();
       return parcelBet;
     } catch (e,s) {
@@ -132,13 +136,13 @@ class DeliveryController extends GetxController {
   }
 
   Future<Furniture?> addFurniture(
-      int isOutCity, String pickDropdown, String dropDropdown, String catTitle, int numberOfPerson) async {
+      int isOutCity, String pickDropdown, String dropDropdown, String catTitle, int numberOfPerson,num pickLat,num pickLong,String picAddress) async {
     final user = await currentUser;
     if (user == null) return null;
     final furniture = Furniture.initial(
         creatorId: user.id,
-        pickLocationLat: pickselectedPlace!.geometry!.location.lat,
-        pickLocationLong: pickselectedPlace!.geometry!.location.lng,
+        pickLocationLat: pickLat,
+        pickLocationLong: pickLong,
         dropLocationLat: dropselectedPlace!.geometry!.location.lat,
         dropLocationLong: dropselectedPlace!.geometry!.location.lng,
         dropAddress: dropselectedPlace!.formattedAddress.toString(),
@@ -151,7 +155,7 @@ class DeliveryController extends GetxController {
         mobileNumebr: '123455676',
         paymentMethod: 'paymentMethod',
         isParseOutCity: isOutCity == 3 ? true : false,
-        pickAddress: pickselectedPlace!.formattedAddress.toString());
+        pickAddress: picAddress);
     try {
       final parcelBet = await _firestoreDatabaseHelper.addFurniture(furniture);
       description.clear();

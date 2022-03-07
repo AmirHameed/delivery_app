@@ -33,7 +33,7 @@ class _DeliveryState extends State<Delivery> {
               Padding(
                 padding: const EdgeInsets.only(top: 60),
                 child: PlacePicker(
-                  apiKey: 'AIzaSyDw5sFwN-NTYcw4C09-seRd1o-W2Jm9ER0',
+                  apiKey: 'AIzaSyDFqEeg_cOa37dAhv1GG5ANkPJ9T2gxv2g',
                   initialPosition: kInitialPosition,
                   useCurrentLocation: true,
                   selectInitialPosition: true,
@@ -76,7 +76,7 @@ class _DeliveryState extends State<Delivery> {
                             width: 400,
                             borderRadius: BorderRadius.circular(12.0),
                             child: state == SearchingState.Searching
-                                ? Center(child: Text('أدخل الموقع في شريط البحث',style: TextStyle(fontSize: 18,color: Colors.red,fontWeight: FontWeight.bold),))
+                                ? Center(child: CircularProgressIndicator())
                                 : Container(
                                     child: Column(children: [
                                       Container(

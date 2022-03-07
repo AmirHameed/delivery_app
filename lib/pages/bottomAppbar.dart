@@ -46,12 +46,12 @@ class _BottomAppState extends State<BottomApp> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/star.png',color: index == 0 ? blueColor : Colors.grey,),
+                    Image.asset('assets/document.png',color: index == 0 ? blueColor : Colors.grey,),
                     // Icon(Icons.star_border,
                     //   color: index == 0 ? Color(0xff7c5aa7) : Colors.grey,
                     // ),
                     Text(
-                      "المفضلة",
+                      "طلباتي",
                       style: TextStyle(
                         color: index == 0 ? blueColor : Colors.grey,
                       ),
@@ -138,12 +138,12 @@ class _BottomAppState extends State<BottomApp> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/document.png',color: index == 4 ? blueColor : Colors.grey,),
+                    Icon(Icons.settings,color: index == 4 ? blueColor : Colors.grey,),
                     // Icon(Icons.settings,
                     //   color: index == 4 ? Color(0xff7c5aa7) : Colors.grey,
                     // ),
                     Text(
-                      "طلباتي",
+                      "ضبط",
                       style: TextStyle(
                         color: index == 4 ? blueColor : Colors.grey,
                       ),

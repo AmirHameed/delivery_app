@@ -1,15 +1,16 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:truckdelivery/constant.dart';
 import 'package:truckdelivery/controller/setting_controller.dart';
+import 'package:truckdelivery/helper/firebase_storage_helper.dart';
 import 'package:truckdelivery/helper/firestore_database_helper.dart';
 import 'package:truckdelivery/helper/get_storage_helper.dart';
+import 'package:truckdelivery/helper/material_dialog_helper.dart';
 import 'package:truckdelivery/model/chat.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:truckdelivery/pages/bottomAppbar.dart';
@@ -29,11 +30,15 @@ class _ChatappState extends State<Chatapp> {
   late String groupId;
   final TextEditingController messageFieldTextController = TextEditingController();
   final GetStorageHelper getStorageHelper = GetStorageHelper.instance;
+  final MaterialDialogHelper _dialogHelper = MaterialDialogHelper.instance();
   final FirestoreDatabaseHelper _firestoreDatabaseHelper = FirestoreDatabaseHelper.instance;
+  final FirebaseStorageHelper _firebaseStorageHelper = FirebaseStorageHelper.instance;
   SettingController orderController = Get.find();
   num reviwesValue = 0;
   Stream<QuerySnapshot<Map<String, dynamic>>>? _stream;
   final List<Chat> _chat = <Chat>[];
+  final ImagePicker imagePicker = ImagePicker();
+  XFile? imageFile;
 
   @override
   void initState() {
@@ -50,8 +55,20 @@ class _ChatappState extends State<Chatapp> {
         : '${orderController.order[widget.index].creatorId.id}-${user.id}';
   }
 
-  Future<void> sendMessage(String content) async {
+  Future<void> uploadImage() async {
+    if (imageFile == null) return;
+    _dialogHelper
+      ..injectContext(context)
+      ..showProgressDialog('إرسال...');
+    final imagePath = await _firebaseStorageHelper.uploadImage(File(imageFile?.path ?? ''));
+    if (imagePath == null) return;
+    _dialogHelper.dismissProgress();
+    sendMessage(imagePath, 1);
+  }
+
+  Future<void> sendMessage(String content, int type) async {
     messageFieldTextController.text = '';
+    imageFile == null;
     final user = await getStorageHelper.user();
     if (user == null) return;
     final Chat chat = Chat.withoutId(
@@ -59,6 +76,7 @@ class _ChatappState extends State<Chatapp> {
         senderId: user.id.toString(),
         receiverId: orderController.order[widget.index].creatorId.id,
         senderImageUrl: user.image,
+        type: type,
         receiverImageUrl: orderController.order[widget.index].creatorId.yourImage,
         senderName: user.firstName + " " + user.lastName,
         receiverName: orderController.order[widget.index].creatorId.firstName +
@@ -111,8 +129,11 @@ class _ChatappState extends State<Chatapp> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             InkWell(
-              onTap: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context)=>FavouritePage()));
+              onTap: () async {
+                final image = await imagePicker.pickImage(source: ImageSource.gallery);
+                if (image == null) return;
+                imageFile = image;
+                uploadImage();
               },
               child: Card(
                 elevation: 5,
@@ -153,71 +174,79 @@ class _ChatappState extends State<Chatapp> {
                           onPressed: () {
                             final String text = messageFieldTextController.text;
                             if (text.isEmpty) return;
-                            sendMessage(text);
+                            sendMessage(text, 0);
                           },
                           icon: Image.asset('assets/send_ic.png')),
                       border: InputBorder.none),
                 ),
               ),
             ),
-            FocusedMenuHolder(
-              menuWidth: MediaQuery.of(context).size.width * 0.50,
-              blurSize: 5.0,
-              menuItemExtent: 45,
-              menuBoxDecoration: const BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.all(Radius.circular(15.0))),
-              duration: const Duration(milliseconds: 100),
-              animateMenuItems: true,
-
-              blurBackgroundColor: Colors.black54,
-              openWithTap: true,
-              // Open Focused-Menu on Tap rather than Long Press
-              menuOffset: 10.0,
-              // Offset value to show menuItem from the selected item
-              bottomOffsetHeight: 10.0,
-              // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
-              menuItems: <FocusedMenuItem>[
-                // Add Each FocusedMenuItem  for Menu Options
-                FocusedMenuItem(
-                    title: const Text("الغاء الطلب"),
-                    trailingIcon: const Icon(
-                      Icons.close_rounded,
-                      color: Color(0xff990000),
-                    ),
-                    onPressed: () {
-                    orderController.orderStatusCancel(orderController.order[widget.index].id);
-                    orderController.order.clear();
-                    Future.delayed(const Duration(milliseconds: 500), () {
-                      Navigator.pushReplacement(
-                          context, MaterialPageRoute(builder: (_) => BottomApp()));
-                    });
-                    }),
-                // FocusedMenuItem(
-                //     title: const Text("رفع شكوى"),
-                //     trailingIcon: const Icon(
-                //       Icons.message_rounded,
-                //       color: Color(0xff990000),
-                //     ),
-                //     onPressed: () {}),
-                // FocusedMenuItem(
-                //     title: const Text("تغير فاتورة"),
-                //     trailingIcon: const Icon(
-                //       Icons.change_circle_outlined,
-                //       color: Color(0xff990000),
-                //     ),
-                //     onPressed: () {}),
-              ],
-              onPressed: () {},
-              child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                  child: const Image(
-                    image: AssetImage('assets/options_ic.png'),
-                  ),
-                ),
+            InkWell(
+              onTap: () {
+                _showMyDialog(context);
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: const Icon(Icons.cancel),
               ),
             ),
+            // FocusedMenuHolder(
+            //   menuWidth: MediaQuery.of(context).size.width * 0.50,
+            //   blurSize: 5.0,
+            //   menuItemExtent: 45,
+            //   menuBoxDecoration: const BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.all(Radius.circular(15.0))),
+            //   duration: const Duration(milliseconds: 100),
+            //   animateMenuItems: true,
+            //
+            //   blurBackgroundColor: Colors.black54,
+            //   openWithTap: true,
+            //   // Open Focused-Menu on Tap rather than Long Press
+            //   menuOffset: 10.0,
+            //   // Offset value to show menuItem from the selected item
+            //   bottomOffsetHeight: 10.0,
+            //   // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+            //   menuItems: <FocusedMenuItem>[
+            //     // Add Each FocusedMenuItem  for Menu Options
+            //     FocusedMenuItem(
+            //         title: const Text("الغاء الطلب"),
+            //         trailingIcon: const Icon(
+            //           Icons.close_rounded,
+            //           color: Color(0xff990000),
+            //         ),
+            //         onPressed: () {
+            //           orderController.orderStatusCancel(orderController.order[widget.index].id);
+            //           orderController.order.clear();
+            //           Future.delayed(const Duration(milliseconds: 500), () {
+            //             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => BottomApp()));
+            //           });
+            //         }),
+            //     // FocusedMenuItem(
+            //     //     title: const Text("رفع شكوى"),
+            //     //     trailingIcon: const Icon(
+            //     //       Icons.message_rounded,
+            //     //       color: Color(0xff990000),
+            //     //     ),
+            //     //     onPressed: () {}),
+            //     // FocusedMenuItem(
+            //     //     title: const Text("تغير فاتورة"),
+            //     //     trailingIcon: const Icon(
+            //     //       Icons.change_circle_outlined,
+            //     //       color: Color(0xff990000),
+            //     //     ),
+            //     //     onPressed: () {}),
+            //   ],
+            //   onPressed: () {},
+            //   child: Card(
+            //     elevation: 5,
+            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            //     child: Container(
+            //       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            //       child: const Image(
+            //         image: AssetImage('assets/options_ic.png'),
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -520,7 +549,7 @@ class _ChatappState extends State<Chatapp> {
                                               });
                                             },
                                             child: GestureDetector(
-                                              onTap: (){
+                                              onTap: () {
                                                 value.order.clear();
                                                 Future.delayed(const Duration(milliseconds: 500), () {
                                                   Navigator.pushReplacement(
@@ -562,6 +591,89 @@ class _ChatappState extends State<Chatapp> {
     );
   }
 
+  Future<bool> _showMyDialog(context) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: Container(
+            height: 150,
+            padding: EdgeInsets.only(top: 20, right: 10, left: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'هل أنت متأكد أنك تريد إلغاء هذا الطلب',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Color(0xff28476E),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        orderController.orderStatusCancel(orderController.order[widget.index].id);
+                        orderController.order.clear();
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => BottomApp()));
+                        });
+                      },
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                          decoration: BoxDecoration(color: Color(0xff99DEF8), borderRadius: BorderRadius.circular(20)),
+                          child: Center(
+                            child: Text('نعم',
+                                style: TextStyle(
+                                  color: Color(0xff28476E),
+                                  fontSize: 16,
+                                )),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 30,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                          decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(20)),
+                          child: Center(
+                            child: Text('رقم',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 16,
+                                )),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -585,42 +697,80 @@ class MessageBox extends StatelessWidget {
         mainAxisAlignment: chat.senderId == userId ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
           chat.senderId == userId
-              ? Expanded(
-                  child: Column(
-                    crossAxisAlignment: chat.senderId == userId ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 14, right: 14, top: 5, bottom: 10),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: (chat.senderId == userId ? Alignment.topRight : Alignment.topLeft),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  color: (chat.senderId == userId ? yourChatColor : myChatColor),
+              ? chat.type == 0
+                  ? Expanded(
+                      child: Column(
+                        crossAxisAlignment: chat.senderId == userId ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(left: 14, right: 14, top: 5, bottom: 10),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: (chat.senderId == userId ? Alignment.topRight : Alignment.topLeft),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                      color: (chat.senderId == userId ? yourChatColor : myChatColor),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text(chat.content,
+                                            softWrap: true, maxLines: null, style: TextStyle(fontSize: 15, color: Colors.white)),
+                                        Text(
+                                          timeago.format(chat.timeStamp),
+                                          textAlign: TextAlign.end,
+                                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(chat.content,
-                                        softWrap: true, maxLines: null, style: TextStyle(fontSize: 15, color: Colors.white)),
-                                    Text(
-                                      timeago.format(chat.timeStamp),
-                                      textAlign: TextAlign.end,
-                                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                                    )
-                                  ],
-                                ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
+                    )
+                  : Container(
+                      child: FlatButton(
+                      child: Material(
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) => CircleAvatar(
+                            backgroundColor: blueColor,
+                            minRadius: 12,
+                            maxRadius: 15,
+                            child: Icon(
+                              Icons.person_outline,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Material(
+                            child: Image.asset(
+                              'assets/empty_image.png',
+                              width: 200.0,
+                              height: 200.0,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            clipBehavior: Clip.hardEdge,
+                          ),
+                          imageUrl: chat.content,
+                          width: 200.0,
+                          height: 200.0,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        clipBehavior: Clip.hardEdge,
+                      ),
+                      onPressed: () {},
+                      padding: EdgeInsets.all(0),
+                    ))
               : Container(
                   width: 50,
                   height: 50,
@@ -642,47 +792,85 @@ class MessageBox extends StatelessWidget {
                       image: chat.senderImageUrl.isNotEmpty
                           ? DecorationImage(image: CachedNetworkImageProvider(chat.senderImageUrl), fit: BoxFit.cover)
                           : const DecorationImage(image: AssetImage('assets/empty_image.png'), fit: BoxFit.cover)))
-              : Expanded(
-                  child: Column(
-                    crossAxisAlignment: chat.senderId == userId ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 14, right: 14, top: 5, bottom: 10),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: (chat.senderId == userId ? Alignment.topRight : Alignment.topLeft),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  color: (chat.senderId == userId ? yourChatColor : myChatColor),
-                                ),
-                                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      chat.content,
-                                      softWrap: true,
-                                      maxLines: null,
-                                      style:
-                                          TextStyle(fontSize: 15, color: chat.senderId == userId ? lightblueColor : Colors.white),
+              : chat.type == 0
+                  ? Expanded(
+                      child: Column(
+                        crossAxisAlignment: chat.senderId == userId ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(left: 14, right: 14, top: 5, bottom: 10),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: (chat.senderId == userId ? Alignment.topRight : Alignment.topLeft),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                      color: (chat.senderId == userId ? yourChatColor : myChatColor),
                                     ),
-                                    Text(
-                                      timeago.format(chat.timeStamp),
-                                      textAlign: TextAlign.end,
-                                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                                    )
-                                  ],
+                                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          chat.content,
+                                          softWrap: true,
+                                          maxLines: null,
+                                          style: TextStyle(
+                                              fontSize: 15, color: chat.senderId == userId ? lightblueColor : Colors.white),
+                                        ),
+                                        Text(
+                                          timeago.format(chat.timeStamp),
+                                          textAlign: TextAlign.end,
+                                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
+                    )
+                  : Container(
+                      child: FlatButton(
+                      child: Material(
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) => CircleAvatar(
+                            backgroundColor: blueColor,
+                            minRadius: 12,
+                            maxRadius: 15,
+                            child: Icon(
+                              Icons.person_outline,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Material(
+                            child: Image.asset(
+                              'assets/empty_image.png',
+                              width: 200.0,
+                              height: 200.0,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            clipBehavior: Clip.hardEdge,
+                          ),
+                          imageUrl: chat.content,
+                          width: 200.0,
+                          height: 200.0,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        clipBehavior: Clip.hardEdge,
+                      ),
+                      onPressed: () {},
+                      padding: EdgeInsets.all(0),
+                    ))
         ],
       ),
     );

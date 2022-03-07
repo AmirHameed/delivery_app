@@ -10,6 +10,7 @@ class Chat {
   final String receiverName;
   final String content;
   final String id;
+  final int type;
   final DateTime timeStamp;
 
   Chat({
@@ -21,6 +22,7 @@ class Chat {
     required this.receiverName,
     required this.content,
     required this.chatId,
+    required this.type,
     required this.timeStamp,
     required this.id,
   });
@@ -33,6 +35,7 @@ class Chat {
       required String senderName,
       required String receiverName,
       required String content,
+        required int type,
       required String chatId})
       : this(
             chatId: chatId,
@@ -43,6 +46,7 @@ class Chat {
             receiverImageUrl: receiverImageUrl,
             receiverName: receiverName,
             content: content,
+            type:type,
             id: '',
             timeStamp: DateTime(1700));
 
@@ -55,6 +59,7 @@ class Chat {
     final senderName = json['senderName'];
     final receiverName = json['receiverName'];
     final content = json['content'];
+    final type=json.containsKey('type')?json['type']:0;
     final Timestamp createdAtTimestamp = json['time_stamp'];
     final DateTime timeStamp = createdAtTimestamp.toDate();
     return Chat(
@@ -67,12 +72,14 @@ class Chat {
         content: content,
         chatId: chatId,
         timeStamp: timeStamp,
+        type: type,
         id: id);
   }
 
   Map<String, dynamic> toJson(FieldValue fieldValue) => {
         'senderId': senderId,
         'receiverId': receiverId,
+        'type':type,
         'senderImageUrl': senderImageUrl,
         'receiverImageUrl': receiverImageUrl,
         'senderName': senderName,
@@ -89,6 +96,7 @@ class Chat {
       receiverImageUrl: receiverImageUrl,
       senderName: senderName,
       receiverName: receiverName,
+      type: type,
       content: content ?? this.content,
       chatId: chatId,
       timeStamp: timestamp ?? timeStamp,
@@ -96,6 +104,6 @@ class Chat {
 
   @override
   String toString() {
-    return 'Chat{chatId: $chatId, senderId: $senderId, receiverId: $receiverId, senderImageUrl: $senderImageUrl, receiverImageUrl: $receiverImageUrl, senderName: $senderName, receiverName: $receiverName, content: $content, id: $id, timeStamp: $timeStamp}';
+    return 'Chat{chatId: $chatId, senderId: $senderId, receiverId: $receiverId, senderImageUrl: $senderImageUrl, receiverImageUrl: $receiverImageUrl, senderName: $senderName, receiverName: $receiverName, content: $content, id: $id, timeStamp: $timeStamp,type:$type}';
   }
 }
