@@ -41,12 +41,15 @@ class FirestoreDatabaseHelper {
     return UserModelRider.fromJson(documentReference.data()!);
   }
   Future<List<Order>> getOrderRequest(String userId) async {
+    print('userID==>$userId');
     final documentReferences = await Future.wait([
       _firebaseFirestore.collection(_ORDER).
       where('user_id', isEqualTo: userId).
       where('completed', isEqualTo: true).
       get(const GetOptions(source: Source.server)).timeout(_timeoutDuration),
     ]);
+
+    print('document reference===>${documentReferences.first}');
 
     final order = <String, Order>{};
     for (final querySnapshot in documentReferences) {

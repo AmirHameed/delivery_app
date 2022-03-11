@@ -35,7 +35,7 @@ dependencies:
   image_picker:
   google_maps_place_picker: any
   #flutter_polyline_points: any
-  get_storage: 2.0.3
+  get_storage:
   firebase_storage: ^10.2.4
   connectivity: ^3.0.6
   google_sign_in:
@@ -45,10 +45,15 @@ dependencies:
   geolocator: any
   cached_network_image: ^3.2.0
   sign_in_with_apple: ^3.3.0
-  uuid: ^3.0.5
+  uuid:
   get: ^4.6.1
   crypto:
   focused_menu: ^1.0.5
+  audioplayers: ^0.20.1
+  record_mp3: ^3.0.0
+  record: ^3.0.3
+  permission_handler:
+  path_provider: ^2.0.9
   flutter_rating_bar: ^4.0.0
   timeago:
   url_launcher: ^6.0.20

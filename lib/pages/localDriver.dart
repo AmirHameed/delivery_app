@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:truckdelivery/pages/delivery.dart';
 
 class LocalDriver extends StatefulWidget {
@@ -25,11 +26,11 @@ class _LocalDriverState extends State<LocalDriver> {
               height: MediaQuery.of(context).size.height * 0.3,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(widget.isOutTruck == true ? 'assets/home5.png' : 'assets/home6.png'), fit: BoxFit.cover)),
+                      image: AssetImage('assets/home6.png'), fit: BoxFit.cover)),
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                      begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xff28476E), Colors.white10]),
+                      begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xff457ab1), Colors.black26.withOpacity(0.1)]),
                 ),
               ),
             ),
@@ -46,23 +47,24 @@ class _LocalDriverState extends State<LocalDriver> {
                 child: Column(
                   children: [
                     Row(
+
                       children: [
                         InkWell(
                             onTap: () {
                               Navigator.pop(context);
                             },
                             child: Image.asset('assets/backButton.png')),
-                        SizedBox(
-                          width: 40,
-                        ),
-                        Text(
-                          widget.isOutTruck ? ' سطحة ( خارج المدينة )' : 'سطحة ( داخل المدينة )',
+
+                        Text('نقل سيارات',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
                           ),
                         ),
+                        SizedBox(),
                       ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
                     SizedBox(
                       height: 150,
@@ -76,7 +78,7 @@ class _LocalDriverState extends State<LocalDriver> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (ctx) =>
-                                          Delivery(isOutCity: widget.isOutTruck == true ? 5 : 6, carTile: 'سطحة عادية')));
+                                          Delivery(isOutCity:6, carTile: 'سطحة عادية')));
                             },
                             child: Card(
                               elevation: 5,
@@ -86,46 +88,6 @@ class _LocalDriverState extends State<LocalDriver> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Container(
-                                      //   width: 50,
-                                      //   padding:
-                                      //       EdgeInsets.symmetric(vertical: 8),
-                                      //   decoration: BoxDecoration(
-                                      //     image: DecorationImage(
-                                      //         image:
-                                      //             AssetImage('assets/batch.png'),
-                                      //         fit: BoxFit.fill),
-                                      //   ),
-                                      //   child: Column(
-                                      //     children: [
-                                      //       SizedBox(
-                                      //         height: 25,
-                                      //       ),
-                                      //       Transform.rotate(
-                                      //         angle: 32,
-                                      //         child: Text(
-                                      //           '170',
-                                      //           style: TextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 12,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       Transform.rotate(
-                                      //         angle: 32,
-                                      //         alignment: Alignment.topRight,
-                                      //         child: Text(
-                                      //           'ريال',
-                                      //           textAlign: TextAlign.right,
-                                      //           style: TextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 12,
-                                      //           ),
-                                      //         ),
-                                      //       )
-                                      //     ],
-                                      //   ),
-                                      // ),
                                       Container(
                                         width: 140,
                                         child: Column(
@@ -179,7 +141,7 @@ class _LocalDriverState extends State<LocalDriver> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (ctx) =>
-                                          Delivery(isOutCity: widget.isOutTruck == true ? 5 : 6, carTile: 'سطحة هيدروليك')));
+                                          Delivery(isOutCity: 6, carTile: 'سطحة هيدروليك')));
                             },
                             child: Card(
                               elevation: 5,
@@ -189,46 +151,6 @@ class _LocalDriverState extends State<LocalDriver> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Container(
-                                      //   width: 50,
-                                      //   padding:
-                                      //       EdgeInsets.symmetric(vertical: 8),
-                                      //   decoration: BoxDecoration(
-                                      //     image: DecorationImage(
-                                      //         image:
-                                      //             AssetImage('assets/batch.png'),
-                                      //         fit: BoxFit.fill),
-                                      //   ),
-                                      //   child: Column(
-                                      //     children: [
-                                      //       SizedBox(
-                                      //         height: 25,
-                                      //       ),
-                                      //       Transform.rotate(
-                                      //         angle: 32,
-                                      //         child: Text(
-                                      //           '17',
-                                      //           style: TextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 12,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       Transform.rotate(
-                                      //         angle: 32,
-                                      //         alignment: Alignment.topRight,
-                                      //         child: Text(
-                                      //           'ريال',
-                                      //           textAlign: TextAlign.right,
-                                      //           style: TextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 12,
-                                      //           ),
-                                      //         ),
-                                      //       )
-                                      //     ],
-                                      //   ),
-                                      // ),
                                       Container(
                                         width: 140,
                                         child: Column(
@@ -281,7 +203,7 @@ class _LocalDriverState extends State<LocalDriver> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (ctx) => Delivery(
-                                          isOutCity: widget.isOutTruck == true ? 5 : 6, carTile: ' سطحة مغطاه نزول كامل')));
+                                          isOutCity:6, carTile: ' سطحة مغطاه نزول كامل')));
                             },
                             child: Card(
                               elevation: 5,
@@ -291,46 +213,6 @@ class _LocalDriverState extends State<LocalDriver> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Container(
-                                      //   width: 50,
-                                      //   padding:
-                                      //       EdgeInsets.symmetric(vertical: 8),
-                                      //   decoration: BoxDecoration(
-                                      //     image: DecorationImage(
-                                      //         image:
-                                      //             AssetImage('assets/batch.png'),
-                                      //         fit: BoxFit.fill),
-                                      //   ),
-                                      //   child: Column(
-                                      //     children: [
-                                      //       SizedBox(
-                                      //         height: 25,
-                                      //       ),
-                                      //       Transform.rotate(
-                                      //         angle: 32,
-                                      //         child: Text(
-                                      //           '170',
-                                      //           style: TextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 12,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       Transform.rotate(
-                                      //         angle: 32,
-                                      //         alignment: Alignment.topRight,
-                                      //         child: Text(
-                                      //           'ريال',
-                                      //           textAlign: TextAlign.right,
-                                      //           style: TextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 12,
-                                      //           ),
-                                      //         ),
-                                      //       )
-                                      //     ],
-                                      //   ),
-                                      // ),
                                       Container(
                                         width: 140,
                                         child: Column(
@@ -384,7 +266,7 @@ class _LocalDriverState extends State<LocalDriver> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (ctx) => Delivery(
-                                          isOutCity: widget.isOutTruck == true ? 5 : 6, carTile: 'ونش رفع')));
+                                          isOutCity: 6, carTile: 'ونش رفع')));
                             },
                             child: Card(
                               elevation: 5,
@@ -394,46 +276,6 @@ class _LocalDriverState extends State<LocalDriver> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Container(
-                                      //   width: 50,
-                                      //   padding:
-                                      //       EdgeInsets.symmetric(vertical: 8),
-                                      //   decoration: BoxDecoration(
-                                      //     image: DecorationImage(
-                                      //         image:
-                                      //             AssetImage('assets/batch.png'),
-                                      //         fit: BoxFit.fill),
-                                      //   ),
-                                      //   child: Column(
-                                      //     children: [
-                                      //       SizedBox(
-                                      //         height: 25,
-                                      //       ),
-                                      //       Transform.rotate(
-                                      //         angle: 32,
-                                      //         child: Text(
-                                      //           '170',
-                                      //           style: TextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 12,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       Transform.rotate(
-                                      //         angle: 32,
-                                      //         alignment: Alignment.topRight,
-                                      //         child: Text(
-                                      //           'ريال',
-                                      //           textAlign: TextAlign.right,
-                                      //           style: TextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 12,
-                                      //           ),
-                                      //         ),
-                                      //       )
-                                      //     ],
-                                      //   ),
-                                      // ),
                                       Container(
                                         width: 140,
                                         child: Column(

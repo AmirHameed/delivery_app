@@ -56,6 +56,7 @@ class SettingController extends GetxController {
     final user = await getStorageHelper.user();
     if (user == null) return null;
     allOrder = await _firestoreDatabaseHelper.getOrderRequest(user.id);
+    print('alllllllllllllorder=?$allOrder');
     update();
     notifyChildrens();
   }

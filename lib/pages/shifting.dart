@@ -32,7 +32,7 @@ class _ShiftingState extends State<Shifting> {
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                      begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xff28476E), Colors.white10]),
+                      begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xff28476E), Colors.black.withOpacity(0.3)]),
                 ),
               ),
             ),
@@ -59,8 +59,7 @@ class _ShiftingState extends State<Shifting> {
                             },
                             child: Image.asset('assets/backButton.png')),
                         Center(
-                          child: Text(
-                            widget.isOutFurniture == true ? 'شحن عفش ( خارج المدينة )' : 'نقل عفش',
+                          child: Text('نقل عفش',
                             style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ),

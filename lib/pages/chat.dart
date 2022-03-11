@@ -1,10 +1,14 @@
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:record_mp3/record_mp3.dart';
 import 'package:truckdelivery/constant.dart';
 import 'package:truckdelivery/controller/setting_controller.dart';
 import 'package:truckdelivery/helper/firebase_storage_helper.dart';
@@ -16,6 +20,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:truckdelivery/pages/bottomAppbar.dart';
 import 'package:truckdelivery/pages/map.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart';
 
 class Chatapp extends StatefulWidget {
   final int index;
@@ -39,6 +44,88 @@ class _ChatappState extends State<Chatapp> {
   final List<Chat> _chat = <Chat>[];
   final ImagePicker imagePicker = ImagePicker();
   XFile? imageFile;
+  String? recordFilePath;
+  bool isPlayingMsg = false, isRecording = false, isSending = false;
+
+  Future<bool> checkPermission() async {
+    if (!await Permission.microphone.isGranted) {
+      PermissionStatus status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  int i = 0;
+
+  Future<String> getFilePath() async {
+    Directory storageDirectory = await getApplicationDocumentsDirectory();
+    String sdPath = storageDirectory.path + "/record";
+    var d = Directory(sdPath);
+    if (!d.existsSync()) {
+      d.createSync(recursive: true);
+    }
+    return sdPath + "/test_${i++}.mp3";
+  }
+
+  void startRecord() async {
+    bool hasPermission = await checkPermission();
+    if (hasPermission) {
+      recordFilePath = await getFilePath();
+
+      RecordMp3.instance.start(recordFilePath!, (type) {
+        setState(() {});
+      });
+    } else {}
+    setState(() {});
+  }
+
+  void stopRecord() async {
+    bool s = RecordMp3.instance.stop();
+    if (s) {
+      setState(() {
+        isSending = true;
+      });
+      await uploadAudio();
+
+      setState(() {
+        isPlayingMsg = false;
+      });
+    }
+  }
+
+  Future<void> play() async {
+    if (recordFilePath == null) return;
+    if (recordFilePath != null && File(recordFilePath!).existsSync()) {
+      AudioPlayer audioPlayer = AudioPlayer();
+      await audioPlayer.play(
+        recordFilePath!,
+        isLocal: true,
+      );
+    }
+  }
+
+  Future _loadFile(String url) async {
+    Uri uri=Uri.parse(url);
+    final bytes = await readBytes(uri);
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/audio.mp3');
+
+    await file.writeAsBytes(bytes);
+    if (await file.exists()) {
+      setState(() {
+        recordFilePath = file.path;
+        isPlayingMsg = true;
+        print(isPlayingMsg);
+      });
+      await play();
+      setState(() {
+        isPlayingMsg = false;
+        print(isPlayingMsg);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -64,6 +151,17 @@ class _ChatappState extends State<Chatapp> {
     if (imagePath == null) return;
     _dialogHelper.dismissProgress();
     sendMessage(imagePath, 1);
+  }
+
+  Future<void> uploadAudio() async {
+    if (recordFilePath == null) return;
+    _dialogHelper
+      ..injectContext(context)
+      ..showProgressDialog('إرسال...');
+    final imagePath = await _firebaseStorageHelper.uploadImage(File(recordFilePath ?? ''));
+    if (imagePath == null) return;
+    _dialogHelper.dismissProgress();
+    sendMessage(imagePath, 2);
   }
 
   Future<void> sendMessage(String content, int type) async {
@@ -137,7 +235,10 @@ class _ChatappState extends State<Chatapp> {
               },
               child: Card(
                 elevation: 5,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                shadowColor: isRecording ? Colors.white : Colors.black12,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: const Image(
@@ -146,13 +247,27 @@ class _ChatappState extends State<Chatapp> {
                 ),
               ),
             ),
-            Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                child: const Image(
-                  image: AssetImage('assets/mic_ic.png'),
+            GestureDetector(
+              onLongPress: () {
+                startRecord();
+                setState(() {
+                  isRecording = true;
+                });
+              },
+              onLongPressEnd: (details) {
+                stopRecord();
+                setState(() {
+                  isRecording = false;
+                });
+              },
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  child: const Image(
+                    image: AssetImage('assets/mic_ic.png'),
+                  ),
                 ),
               ),
             ),
@@ -446,7 +561,12 @@ class _ChatappState extends State<Chatapp> {
                             print(_chat);
                             print('orders=====>${orderController.order[widget.index].orderStatus}');
                             final item = _chat[index];
-                            return MessageBox(chat: item, userId: orderController.userModel!.id);
+                            return MessageBox(chat: item, userId: orderController.userModel!.id,isPlaying: isPlayingMsg,onclick:(){
+                                _loadFile(_chat[index].content);},
+                              onSecondaryClick: () {
+                              stopRecord();
+                              },
+                            );
                           }),
                     )
                   ],
@@ -686,8 +806,10 @@ class _ChatappState extends State<Chatapp> {
 class MessageBox extends StatelessWidget {
   final Chat chat;
   final String userId;
-
-  const MessageBox({required this.chat, required this.userId});
+  final bool isPlaying;
+  final VoidCallback onclick;
+  final VoidCallback onSecondaryClick;
+  const MessageBox({required this.chat, required this.userId,required this.isPlaying,required this.onclick,required this.onSecondaryClick});
 
   @override
   Widget build(BuildContext context) {
@@ -734,43 +856,69 @@ class MessageBox extends StatelessWidget {
                         ],
                       ),
                     )
-                  : Container(
-                      child: FlatButton(
-                      child: Material(
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) => CircleAvatar(
-                            backgroundColor: blueColor,
-                            minRadius: 12,
-                            maxRadius: 15,
-                            child: Icon(
-                              Icons.person_outline,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Material(
-                            child: Image.asset(
-                              'assets/empty_image.png',
+                  : chat.type == 1
+                      ? Container(
+                          child: FlatButton(
+                          child: Material(
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => CircleAvatar(
+                                backgroundColor: blueColor,
+                                minRadius: 12,
+                                maxRadius: 15,
+                                child: Icon(
+                                  Icons.person_outline,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Material(
+                                child: Image.asset(
+                                  'assets/empty_image.png',
+                                  width: 200.0,
+                                  height: 200.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8.0),
+                                ),
+                                clipBehavior: Clip.hardEdge,
+                              ),
+                              imageUrl: chat.content,
                               width: 200.0,
                               height: 200.0,
                               fit: BoxFit.cover,
                             ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8.0),
-                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(8.0)),
                             clipBehavior: Clip.hardEdge,
                           ),
-                          imageUrl: chat.content,
-                          width: 200.0,
-                          height: 200.0,
-                          fit: BoxFit.cover,
+                          onPressed: () {},
+                          padding: EdgeInsets.all(0),
+                        ))
+                      : Align(
+                        alignment: (chat.senderId == userId ? Alignment.topRight : Alignment.topLeft),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(15)),
+                            color: (chat.senderId == userId ? yourChatColor : myChatColor),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                          child: GestureDetector(
+                             onTap: onclick,
+                            onSecondaryTap: onSecondaryClick,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Icon( isPlaying? Icons.cancel : Icons.play_arrow),
+                                Text(
+                                  timeago.format(chat.timeStamp),
+                                  textAlign: TextAlign.end,
+                                  style: const TextStyle(fontSize: 12, color: Colors.white),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        clipBehavior: Clip.hardEdge,
-                      ),
-                      onPressed: () {},
-                      padding: EdgeInsets.all(0),
-                    ))
+                      )
               : Container(
                   width: 50,
                   height: 50,

@@ -7,9 +7,11 @@ import 'package:truckdelivery/common/empty_image_container.dart';
 import 'package:truckdelivery/common/placeholder_image.dart';
 import 'package:truckdelivery/constant.dart';
 import 'package:truckdelivery/controller/setting_controller.dart';
+import 'package:truckdelivery/pages/crainScreen.dart';
 import 'package:truckdelivery/pages/localDriver.dart';
 import 'package:truckdelivery/pages/profile.dart';
 import 'package:truckdelivery/pages/shifting.dart';
+import 'package:truckdelivery/pages/tanker_screen.dart';
 import 'delivery.dart';
 
 class HomePage extends StatefulWidget {
@@ -166,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                                                     carTile: '',
                                                   )));
                                     },
-                                    child: myContainer('شحن طرود ( خارج المدينة )', 'assets/home1.png'),
+                                    child: myContainer('نقل بضائع عامة', 'assets/home3.png'),
                                   )),
                                   SizedBox(
                                     width: 10,
@@ -182,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                                                     carTile: '',
                                                   )));
                                     },
-                                    child: myContainer('ارسال واستقبال طرود', 'assets/home2.png'),
+                                    child: myContainer('نقل طرود', 'assets/home2.png'),
                                   )),
                                 ],
                               ),
@@ -199,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                                                           isOutFurniture: true,
                                                         )));
                                           },
-                                          child: myContainer('شحن عفش ( خارج المدينة )', 'assets/home3.png'))),
+                                          child: myContainer('نقل مواشي', 'assets/animals.png'))),
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -226,11 +228,11 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (ctx) => LocalDriver(
-                                                    isOutTruck: true,
+                                              builder: (ctx) => TankerScreen(
+                                                isOutFurniture: false,
                                                   )));
                                     },
-                                    child: myContainer(' سطحة ( خارج المدينة )', 'assets/home5.png'),
+                                    child: myContainer('صهاريج الماء', 'assets/tanker.png'),
                                   )),
                                   SizedBox(
                                     width: 10,
@@ -242,13 +244,31 @@ class _HomePageState extends State<HomePage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (ctx) => LocalDriver(
-                                                    isOutTruck: false,
-                                                  )));
+                                                isOutTruck: true,
+                                              )));
                                     },
-                                    child: myContainer('سطحة ( داخل المدينة )', 'assets/home6.png'),
+                                    child: myContainer('نقل سيارات', 'assets/home6.png'),
                                   )),
                                 ],
                               ),
+                              SizedBox(height: 15),
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (ctx) => Crain(
+                                                    isOutFurniture: false,
+                                                  )));
+                                        },
+                                        child: myContainer('معدات المقاولات', 'assets/crain.png'),
+                                      )),
+                                ],
+                              ),
+
                             ],
                           ),
                         ),
@@ -280,15 +300,15 @@ class _HomePageState extends State<HomePage> {
       height: 120,
       // padding: EdgeInsets.symmetric(vertical: 50),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(15),
         image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
       ),
       child: Container(
         padding: EdgeInsets.only(bottom: 10, top: 10,right: 10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(15),
           gradient: LinearGradient(
-              begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xff28476E), Colors.white10]),
+              begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xff698db3), Colors.black.withOpacity(0.1)]),
         ),
         child: Align(
           alignment: Alignment.topRight,
