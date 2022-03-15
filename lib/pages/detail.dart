@@ -8,6 +8,7 @@ import 'package:truckdelivery/helper/material_dialog_helper.dart';
 import 'package:truckdelivery/helper/snackbar_helper.dart';
 import 'package:truckdelivery/model/snackbar_message.dart';
 import 'package:intl/intl.dart';
+import 'package:truckdelivery/pages/orderRequest.dart';
 
 class DetailPage extends StatefulWidget {
   final int isOutCity;
@@ -69,14 +70,20 @@ class _DetailPageState extends State<DetailPage> {
       _dialogHelper.showMaterialDialogWithContent(MaterialDialogContent.networkError(), () => _addRentCar(date, time));
       return;
     }
-    final snackbar = SnackbarHelper.instance..injectContext(context);
-    if (message.isEmpty) {
-      snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: message));
-      return;
-    }
-    snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تمت إضافة الطلب بنجاح..!'));
-    int count = 0;
-    Navigator.popUntil(context, (_) => count++ == 3);
+    // final snackbar = SnackbarHelper.instance..injectContext(context);
+    // if (message.isEmpty) {
+    //   snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: message));
+    //   return;
+    // }
+    // snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تمت إضافة الطلب بنجاح..!'));
+    // int count = 0;
+    // Navigator.popUntil(context, (_) => count++ == 3);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (ctx) => TimerClass(
+              parcelId: message.id,
+            )));
   }
 
   @override

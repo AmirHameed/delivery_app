@@ -9,6 +9,7 @@ import 'package:truckdelivery/helper/material_dialog_helper.dart';
 import 'package:truckdelivery/helper/snackbar_helper.dart';
 import 'package:truckdelivery/model/snackbar_message.dart';
 import 'package:intl/intl.dart';
+import 'package:truckdelivery/pages/orderRequest.dart';
 
 class TankerDetailScreen extends StatefulWidget {
   final int isOutCity;
@@ -25,40 +26,6 @@ class _TankerDetailScreenState extends State<TankerDetailScreen> {
   final ImagePicker imagePicker = ImagePicker();
   XFile? imageFile;
   final MaterialDialogHelper _dialogHelper = MaterialDialogHelper.instance();
-  final f = new DateFormat('yyyy-MM-dd');
-  final timeFormat = new DateFormat('hh:mm');
-  String date = '';
-  String time = '';
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
-
-  _selectDate(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
-    );
-    if (selected != null && selected != selectedDate)
-      setState(() {
-        selectedDate = selected;
-        date = f.format(selectedDate);
-      });
-  }
-
-  _selectTime(BuildContext context) async {
-    final TimeOfDay? timeOfDay = await showTimePicker(
-      context: context,
-      initialTime: selectedTime,
-      initialEntryMode: TimePickerEntryMode.dial,
-    );
-    if (timeOfDay != null && timeOfDay != selectedTime) {
-      setState(() {
-        selectedTime = timeOfDay;
-        time = '${selectedTime.hour.hours}:${selectedTime.minute.minutes}';
-      });
-    }
-  }
 
   void _addRentCar(String date, String time) async {
     _dialogHelper
@@ -70,66 +37,81 @@ class _TankerDetailScreenState extends State<TankerDetailScreen> {
       _dialogHelper.showMaterialDialogWithContent(MaterialDialogContent.networkError(), () => _addRentCar(date, time));
       return;
     }
-    final snackbar = SnackbarHelper.instance..injectContext(context);
-    if (message.isEmpty) {
-      snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: message));
-      return;
-    }
-    snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تمت إضافة الطلب بنجاح..!'));
-    int count = 0;
-    Navigator.popUntil(context, (_) => count++ == 3);
+    // final snackbar = SnackbarHelper.instance..injectContext(context);
+    // if (message.isEmpty) {
+    //   snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: message));
+    //   return;
+    // }
+    // snackbar.showSnackbar(snackbar: SnackbarMessage.success(message: 'تمت إضافة الطلب بنجاح..!'));
+    // int count = 0;
+    // Navigator.popUntil(context, (_) => count++ == 3);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (ctx) => TimerClass(
+              parcelId: message.id,
+            )));
   }
 
-  _showMyDialog() {
+
+  _showDialog() {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          backgroundColor: Colors.white.withOpacity(0.8),
           child: Container(
-            height: 125,
-            padding: EdgeInsets.only(
-              top: 20,
+            height: 200,
+            width: MediaQuery.of(context).size.width * .3,
+            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10)
             ),
-            child: Column(
-              children: [
-                Text(
-                  'تم ارســال طلبك بنجــاح',
-                  style: TextStyle(fontSize: 20),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                InkWell(
-                  onTap: () {
+            child: GridView.count(
+              crossAxisCount: 4 ,
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 3,
+              children: List.generate(6,(index){
+                return GestureDetector(
+                  onTap: (){
+                    saveTime='${index+1}';
+                    setState(() {
+                    });
                     Navigator.pop(context);
-                    // Navigator.push(context, MaterialPageRoute(builder: (ctx) => Tasfeel()));
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    width: 70,
+                    height: 120,
                     decoration: BoxDecoration(
-                        color: Color(0xff28476E),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                        )),
-                    child: Center(
-                      child: Text('تأكيد الطلب',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          )),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('ساعة',
+                            style: TextStyle(
+                              color: blueColor,
+                              fontSize: 18,
+                            )),
+                        Text('${index+1}',
+                            style: TextStyle(
+                              color: blueColor,
+                              fontSize: 18,
+                            )),
+                      ],
                     ),
                   ),
-                )
-              ],
+                );
+              }),
             ),
           ),
         );
       },
     );
   }
-
 
   _showSizedDialog() {
     return showDialog(
@@ -137,46 +119,65 @@ class _TankerDetailScreenState extends State<TankerDetailScreen> {
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          backgroundColor: Colors.white.withOpacity(0.8),
           child: Container(
-            height: 125,
-            padding: EdgeInsets.only(
-              top: 20,
+            height: 200,
+            width: MediaQuery.of(context).size.width * .3,
+            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10)
             ),
-            child: Column(
-              children: [
-                InkWell(
-                  onTap: () {
+            child: GridView.count(
+              crossAxisCount: 5 ,
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 3,
+              children: List.generate(15,(index){
+                return GestureDetector(
+                  onTap: (){
+                    saveSize='${index+5}';
+                    setState(() {
+                    });
                     Navigator.pop(context);
-                    // Navigator.push(context, MaterialPageRoute(builder: (ctx) => Tasfeel()));
                   },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                        )),
-                    child: Center(
-                      child: Text(' 5 م 3',
-                          style: TextStyle(
-                            color: blueColor,
-                            fontSize: 18,
-                          )),
+                  child: Center(
+                    child: Container(
+                      width: 70,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('3 م',
+                              style: TextStyle(
+                                color: blueColor,
+                                fontSize: 18,
+                              )),
+                          Text('${index+5}',
+                              style: TextStyle(
+                                color: blueColor,
+                                fontSize: 18,
+                              )),
+                        ],
+                      ),
                     ),
                   ),
-                )
-              ],
+                );
+              }),
             ),
           ),
         );
       },
     );
   }
+  String saveSize='حجم الوايت ';
+  String saveTime='مدة التوصيل';
+
   @override
   Widget build(BuildContext context) {
-    date = f.format(selectedDate);
-    time = selectedTime.format(context);
     return Scaffold(
       backgroundColor: Color(0xff99DEF8),
       body: Container(
@@ -246,12 +247,16 @@ class _TankerDetailScreenState extends State<TankerDetailScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
+                                Text(saveSize=='حجم الوايت '?"": '3 م',
+                                    style: TextStyle(
+                                      color: blueColor,
+                                      fontSize: 14,
+                                    )),
                                 Text(
-                                  time,
-                                  textAlign: TextAlign.center,
+                                  saveSize,
                                   style: TextStyle(
-                                    color: Color(0xff28476E),
-                                    fontSize: 12,
+                                    color: blueColor,
+                                    fontSize: 14,
                                   ),
                                 ),
                                 SizedBox(
@@ -277,7 +282,7 @@ class _TankerDetailScreenState extends State<TankerDetailScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                           _showMyDialog();
+                           _showDialog();
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -289,7 +294,7 @@ class _TankerDetailScreenState extends State<TankerDetailScreen> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
-                                  date,
+                                  '$saveTime ${saveTime=='مدة التوصيل'?'':'ساعة'}',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Color(0xff28476E),
@@ -441,8 +446,17 @@ class _TankerDetailScreenState extends State<TankerDetailScreen> {
                             if (deliveryController.description.text.isEmpty) {
                               final snackbar = SnackbarHelper.instance..injectContext(context);
                               snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: 'الرجاء كتابة وصف الاغراض'));
-                            } else {
-                              _addRentCar(date, time);
+                            }
+                           else if (saveSize=='حجم الوايت ') {
+                              final snackbar = SnackbarHelper.instance..injectContext(context);
+                              snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: 'الرجاء تحديد حجم العناصر'));
+                            }
+                           else if (saveTime=='مدة التوصيل') {
+                              final snackbar = SnackbarHelper.instance..injectContext(context);
+                              snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: 'الرجاء تحديد وقت العناصر'));
+                            }
+                            else {
+                              _addRentCar(saveSize, saveTime);
                             }
                           },
                           child: Padding(

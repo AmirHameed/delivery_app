@@ -193,14 +193,14 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Expanded(
                                       child: GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (ctx) => Shifting(
-                                                          isOutFurniture: true,
-                                                        )));
-                                          },
+                                          // onTap: () {
+                                          //   Navigator.push(
+                                          //       context,
+                                          //       MaterialPageRoute(
+                                          //           builder: (ctx) => Shifting(
+                                          //                 isOutFurniture: true,
+                                          //               )));
+                                          // },
                                           child: myContainer('نقل مواشي', 'assets/animals.png'))),
                                   SizedBox(
                                     width: 10,
@@ -261,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (ctx) => Crain(
-                                                    isOutFurniture: false,
+                                                    isOutFurniture: true,
                                                   )));
                                         },
                                         child: myContainer('معدات المقاولات', 'assets/crain.png'),

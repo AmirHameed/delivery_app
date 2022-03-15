@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:truckdelivery/controller/delivery_controller.dart';
+import 'package:truckdelivery/pages/delivery.dart';
 import 'package:truckdelivery/pages/onlyCars.dart';
 
 class Crain extends StatefulWidget {
@@ -66,7 +67,7 @@ class _CrainState extends State<Crain> {
                       ],
                     ),
                     SizedBox(
-                      height: 110,
+                      height: 120,
                     ),
                     Container(
                       padding: EdgeInsets.only(bottom: 10),
@@ -83,17 +84,10 @@ class _CrainState extends State<Crain> {
                             ),
                             Row(
                               children: [
-
-
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (ctx) => OnlyCarDelivery(
-                                                inOnlyCar: widget.isOutFurniture,
-                                              )));
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity:  7, carTile: 'شيول')));
                                     },
                                     child: commonContainer('assets/crain3.png', 'شيول'),
                                   ),
@@ -104,12 +98,7 @@ class _CrainState extends State<Crain> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (ctx) => OnlyCarDelivery(
-                                                    inOnlyCar: widget.isOutFurniture,
-                                                  )));
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity:  7, carTile: 'رصاصه')));
                                     },
                                     child: commonContainer('assets/crain2.png', 'قلاب'),
                                   ),
@@ -138,12 +127,8 @@ class _CrainState extends State<Crain> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (ctx) => OnlyCarDelivery(
-                                                inOnlyCar: widget.isOutFurniture,
-                                              )));
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity:  7, carTile: 'كرين')));
+
                                     },
                                     child: commonContainer('assets/crain6.png', 'كرين'),
                                   ),
@@ -152,12 +137,8 @@ class _CrainState extends State<Crain> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (ctx) => OnlyCarDelivery(
-                                                    inOnlyCar: widget.isOutFurniture,
-                                                  )));
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity:  7, carTile: 'بوكلين')));
+
                                     },
                                     child: commonContainer('assets/crain5.png', 'بوكلين'),
                                   ),
@@ -168,12 +149,8 @@ class _CrainState extends State<Crain> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (ctx) => OnlyCarDelivery(
-                                                inOnlyCar: widget.isOutFurniture,
-                                              )));
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity:  7, carTile: 'قريدار')));
+
                                     },
                                     child: commonContainer('assets/crain4.png', 'قريدار'),
                                   ),
@@ -189,12 +166,8 @@ class _CrainState extends State<Crain> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (ctx) => OnlyCarDelivery(
-                                                    inOnlyCar: widget.isOutFurniture,
-                                                  )));
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity:  7, carTile: 'لوبد')));
+
                                     },
                                     child: commonContainer('assets/crain9.png', 'لوبد'),
                                   ),
@@ -205,12 +178,8 @@ class _CrainState extends State<Crain> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (ctx) => OnlyCarDelivery(
-                                                inOnlyCar: widget.isOutFurniture,
-                                              )));
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity:  7, carTile: 'بلدوزر')));
+
                                     },
                                     child: commonContainer('assets/crain8.png', 'بلدوزر'),
                                   ),
@@ -221,12 +190,8 @@ class _CrainState extends State<Crain> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (ctx) => OnlyCarDelivery(
-                                                inOnlyCar: widget.isOutFurniture,
-                                              )));
+                                      Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity:  7, carTile: 'ثلاجة')));
+
                                     },
                                     child: commonContainer('assets/crain7.png', 'ثلاجة'),
                                   ),
@@ -238,12 +203,8 @@ class _CrainState extends State<Crain> {
                             ),
                             InkWell(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (ctx) => OnlyCarDelivery(
-                                          inOnlyCar: widget.isOutFurniture,
-                                        )));
+                                Navigator.push(context, MaterialPageRoute(builder: (ctx) => Delivery(isOutCity:  7, carTile: 'سطحة')));
+
                               },
                               child: commonContainer('assets/crain10.png', 'سطحة'),
                             ),

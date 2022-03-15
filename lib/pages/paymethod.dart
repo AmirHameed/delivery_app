@@ -75,7 +75,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
       ..injectContext(context)
       ..showProgressDialog('إضافة طلب ...!');
     final message = await deliveryController.addFurniture(
-        widget.isOutCity, _dropDownValuePick!, _dropDownValueDrop!, widget.carTitle, counter,userPicUp?.pickLocationLat??0,userPicUp?.pickLocationLong??0,userPicUp?.pickAddress??'');
+        widget.isOutCity, _dropDownValuePick??'', _dropDownValueDrop??'', widget.carTitle, counter,userPicUp?.pickLocationLat??0,userPicUp?.pickLocationLong??0,userPicUp?.pickAddress??'');
     _dialogHelper.dismissProgress();
     if (message == null) {
       _dialogHelper.showMaterialDialogWithContent(MaterialDialogContent.networkError(), () => _addParcel());
@@ -172,7 +172,11 @@ class _PaymentMethodState extends State<PaymentMethod> {
                             height: 10,
                           ),
                           Text(
-                            widget.isOutCity == 0 || widget.isOutCity == 1 ? 'بيانات الطلب ' : 'بيانات الأثاث',
+                            widget.isOutCity == 0 || widget.isOutCity == 1 ? 'بيانات الطلب ' :
+                            widget.isOutCity==7?
+                                'لقد كتب لنا هاتفًاأصيل حتى نتمكن من مساعدتك':
+                            'بيانات الأثاث',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Color(0xff28476E),
                               fontSize: 20,
@@ -402,7 +406,10 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                     bottomRight: Radius.circular(20),
                                   )),
                               child: Center(
-                                child: Text(widget.isOutCity == 0 || widget.isOutCity == 1 ? 'تأكيد الطلب' : 'وصف الأغراض',
+                                child: Text(widget.isOutCity == 0 || widget.isOutCity == 1 ?
+                                'تأكيد الطلب' :
+                                widget.isOutCity==7?'تأكيد':
+                                'وصف الأغراض',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,
@@ -501,8 +508,23 @@ class _PaymentMethodState extends State<PaymentMethod> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                          widget.isOutCity==7?
+                              'لقد كتب لنا هاتفًا أصيل حتى نتمكن من مساعدتك':
+                          'وصف الأغراض',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                          )),
+                    ),
                     Center(
-                      child: Text('وصف الأغراض',
+                      child: Text(
+                          widget.carTitle,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 18,
@@ -519,6 +541,8 @@ class _PaymentMethodState extends State<PaymentMethod> {
                         decoration: InputDecoration(
                             fillColor: Colors.white,
                             hintText:
+                                widget.isOutCity=='7'?
+                                    'عدد الأليات , الاشتراطات , اخرى':
                                 'اكتب وصفا كاملا للأغراض المراد نقلها , مثل أثاث المنزل (ثلاجة , غسالة ملابس , مكيفات هواء ) مع عدد الأغراض , أيضا المنزل في أي طابق',
                             filled: true,
                             hintStyle: TextStyle(
@@ -535,107 +559,139 @@ class _PaymentMethodState extends State<PaymentMethod> {
                     SizedBox(
                       height: 15,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                              color: Color(0xff99DEF8),
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
-                          child: DropdownButton(
-                              hint: _dropDownValueDrop == null
-                                  ? Text('وصف لموقع الاستلام')
-                                  : Text(
-                                      _dropDownValueDrop!,
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                              isExpanded: false,
-                              underline: DropdownButtonHideUnderline(child: Container()),
-                              iconSize: 30.0,
-                              style: TextStyle(color: Colors.blue),
-                              items: _items.map(
-                                (val) {
-                                  return DropdownMenuItem<String>(
-                                    value: val,
-                                    child: Text(val),
-                                  );
-                                },
-                              ).toList(),
-                              onChanged: (newVal) {
-                                setState(() {
-                                  _dropDownValueDrop = newVal as String?;
-                                });
-                              }),
+                   widget.isOutCity==7?
+                   SizedBox():
+                   Column(
+                     children: [
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: [
+                           Container(
+                             padding: EdgeInsets.symmetric(horizontal: 5),
+                             decoration: BoxDecoration(
+                                 color: Color(0xff99DEF8),
+                                 borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+                             child: DropdownButton(
+                                 hint: _dropDownValueDrop == null
+                                     ? Text('وصف لموقع الاستلام')
+                                     : Text(
+                                   _dropDownValueDrop!,
+                                   style: TextStyle(color: Colors.black),
+                                 ),
+                                 isExpanded: false,
+                                 underline: DropdownButtonHideUnderline(child: Container()),
+                                 iconSize: 30.0,
+                                 style: TextStyle(color: Colors.blue),
+                                 items: _items.map(
+                                       (val) {
+                                     return DropdownMenuItem<String>(
+                                       value: val,
+                                       child: Text(val),
+                                     );
+                                   },
+                                 ).toList(),
+                                 onChanged: (newVal) {
+                                   setState(() {
+                                     _dropDownValueDrop = newVal as String?;
+                                   });
+                                 }),
+                           ),
+                           Container(
+                             padding: EdgeInsets.symmetric(horizontal: 5),
+                             decoration: BoxDecoration(
+                                 color: Color(0xff99DEF8),
+                                 borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+                             child: DropdownButton(
+                                 hint: _dropDownValuePick == null
+                                     ? Text('وصف لموقع الاستلام')
+                                     : Text(
+                                   _dropDownValuePick!,
+                                   style: TextStyle(color: Colors.black),
+                                 ),
+                                 isExpanded: false,
+                                 iconSize: 30.0,
+                                 underline: DropdownButtonHideUnderline(child: Container()),
+                                 style: TextStyle(color: Colors.blue),
+                                 items: _items.map(
+                                       (val) {
+                                     return DropdownMenuItem<String>(
+                                       value: val,
+                                       child: Text(val),
+                                     );
+                                   },
+                                 ).toList(),
+                                 onChanged: (newVal) {
+                                   setState(() {
+                                     _dropDownValuePick = newVal as String?;
+                                   });
+                                 }),
+                           )
+                         ],
+                       ),
+                       SizedBox(
+                         height: 10,
+                       ),
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: [
+                           Row(
+                             children: [
+                               IconButton(
+                                   onPressed: () {
+                                     setState(() {
+                                       counter++;
+                                     });
+                                   },
+                                   icon: Icon(Icons.add_circle)),
+                               Text(
+                                 '$counter',
+                                 style: TextStyle(fontSize: 20),
+                               ),
+                               IconButton(
+                                   onPressed: () {
+                                     setState(() {
+                                       if (counter == 0) return;
+                                       counter--;
+                                     });
+                                   },
+                                   icon: Icon(Icons.remove_circle)),
+                             ],
+                           ),
+                           Padding(
+                             padding: const EdgeInsets.only(right: 5),
+                             child: Text('عامل تحميل وتنزيل'),
+                           ),
+                         ],
+                       ),
+                       SizedBox(height: 20),
+                     ],
+                   ),
+                    widget.isOutCity==7?
+                    InkWell(
+                      onTap: () {
+                        final snackbar = SnackbarHelper.instance..injectContext(context);
+                        if (deliveryController.description.text.isEmpty) {
+                          Navigator.pop(context);
+                          snackbar.showSnackbar(snackbar: SnackbarMessage.error(message: 'الرجاء كتابة وصف الاغراض'));
+                        }  else {
+                          Navigator.pop(context);
+                          _addFurniture();
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Color(0xff99DEF8),
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                              color: Color(0xff99DEF8),
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
-                          child: DropdownButton(
-                              hint: _dropDownValuePick == null
-                                  ? Text('وصف لموقع الاستلام')
-                                  : Text(
-                                      _dropDownValuePick!,
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                              isExpanded: false,
-                              iconSize: 30.0,
-                              underline: DropdownButtonHideUnderline(child: Container()),
-                              style: TextStyle(color: Colors.blue),
-                              items: _items.map(
-                                (val) {
-                                  return DropdownMenuItem<String>(
-                                    value: val,
-                                    child: Text(val),
-                                  );
-                                },
-                              ).toList(),
-                              onChanged: (newVal) {
-                                setState(() {
-                                  _dropDownValuePick = newVal as String?;
-                                });
-                              }),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    counter++;
-                                  });
-                                },
-                                icon: Icon(Icons.add_circle)),
-                            Text(
-                              '$counter',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    if (counter == 0) return;
-                                    counter--;
-                                  });
-                                },
-                                icon: Icon(Icons.remove_circle)),
-                          ],
+                        child: Center(
+                          child: Text('تأكيد',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              )),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 5),
-                          child: Text('عامل تحميل وتنزيل'),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
+                      ),
+                    ):
                     InkWell(
                       onTap: () {
                         final snackbar = SnackbarHelper.instance..injectContext(context);

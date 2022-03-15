@@ -165,11 +165,11 @@ class DeliveryController extends GetxController {
     }
   }
 
-  Future<String?> addRentCar(int isOutCity, XFile? image, String catTitle, String time, String date) async {
+  Future<RentCar?> addRentCar(int isOutCity, XFile? image, String catTitle, String time, String date) async {
     final user = await currentUser;
     if (user == null) return null;
     final imagePath = image != null ? await _firebaseStorageHelper.uploadImage(File(image.path)) : '';
-    if (imagePath == null) return'';
+    if (imagePath == null) return null;
 
 
     final rentCar = RentCar.initial(
@@ -192,9 +192,9 @@ class DeliveryController extends GetxController {
         pickAddress: pickselectedPlace!.formattedAddress.toString());
     try {
       final parcelBet = await _firestoreDatabaseHelper.addRentCar(rentCar);
-      if (parcelBet.id.isEmpty) return '';
+      if(parcelBet==null)return null;
       description.clear();
-      return parcelBet.id;
+      return parcelBet;
     } catch (_) {
       return null;
     }
